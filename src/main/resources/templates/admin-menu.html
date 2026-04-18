@@ -1,0 +1,1066 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>Ekwe Iyawe — Configurar Menú</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        :root {
+            --maroon: #7C2100;
+            --maroon-d: #5A1800;
+            --mustard: #ECA322;
+            --gold: #F6B846;
+            --cream: #FEF3C7;
+            --green: #22C55E;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Nunito', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: var(--maroon);
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+            padding-bottom: 110px;
+        }
+
+        .top-bar {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 18px;
+            background: rgba(92, 24, 0, 0.92);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(12px);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .top-bar h1 {
+            font-size: 1.05rem;
+            font-weight: 900;
+            color: var(--gold);
+        }
+
+        #date-display {
+            font-weight: 800;
+            font-size: .78rem;
+            color: var(--cream);
+            opacity: .85;
+        }
+
+        .container {
+            padding: 16px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .day-banner {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1.5px solid rgba(255, 255, 255, 0.2);
+            border-radius: 16px;
+            padding: 18px 20px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .day-banner-title {
+            font-family: 'Great Vibes', cursive;
+            font-size: 2.4rem;
+            color: var(--gold);
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+
+        .day-banner h2 {
+            font-weight: 900;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--cream);
+        }
+
+        .day-banner p {
+            font-size: .78rem;
+            color: rgba(255, 255, 255, 0.65);
+            font-weight: 600;
+            margin-top: 4px;
+        }
+
+        .cat-section {
+            margin-bottom: 18px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1.5px solid rgba(255, 255, 255, 0.15);
+            border-radius: 16px;
+            padding: 16px;
+        }
+
+        .cat-section.extras {
+            background: rgba(236, 163, 34, 0.15);
+            border-color: rgba(246, 184, 70, 0.3);
+        }
+
+        .cat-section.postres {
+            background: rgba(255, 182, 193, 0.1);
+            border-color: rgba(255, 182, 193, 0.3);
+        }
+
+        .cat-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+            padding-bottom: 10px;
+        }
+
+        .cat-title {
+            font-size: 1rem;
+            font-weight: 900;
+            color: var(--gold);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .cat-title.extras-title {
+            color: #FFD88A;
+        }
+
+        .cat-title.postres-title {
+            color: #FFB6C1;
+        }
+
+        .btn-add {
+            background: rgba(246, 184, 70, 0.2);
+            color: var(--gold);
+            border: 1.5px solid rgba(246, 184, 70, 0.4);
+            padding: 6px 13px;
+            border-radius: 8px;
+            font-weight: 800;
+            font-size: .8rem;
+            cursor: pointer;
+        }
+
+        .btn-add:active {
+            transform: scale(.95);
+        }
+
+        .platos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 10px;
+        }
+
+        .plato-card {
+            background: rgba(255, 255, 255, 0.07);
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            padding: 12px;
+            cursor: pointer;
+            transition: all .2s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 4px;
+            position: relative;
+            min-height: 100px;
+        }
+
+        .plato-card .p-name {
+            font-weight: 800;
+            font-size: .85rem;
+            line-height: 1.2;
+            color: #fff;
+        }
+
+        .plato-card .p-price {
+            font-weight: 900;
+            color: rgba(255, 255, 255, 0.55);
+            font-size: .8rem;
+        }
+
+        .plato-card.active {
+            background: rgba(236, 163, 34, 0.25);
+            border-color: var(--mustard);
+            box-shadow: 0 4px 16px rgba(236, 163, 34, 0.25);
+        }
+
+        .plato-card.active .p-price {
+            color: var(--gold);
+        }
+
+        .plato-card::after {
+            content: '✕';
+            position: absolute;
+            top: -7px;
+            right: -7px;
+            background: rgba(255, 255, 255, 0.2);
+            color: rgba(255, 255, 255, 0.7);
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            font-size: .7rem;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .plato-card.active::after {
+            content: '✓';
+            background: var(--mustard);
+            color: var(--maroon);
+        }
+
+        .btn-edit {
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 6px;
+            width: 24px;
+            height: 24px;
+            font-size: .7rem;
+            cursor: pointer;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .qty-control {
+            display: none;
+            align-items: center;
+            gap: 4px;
+            margin-top: 6px;
+            background: rgba(0, 0, 0, 0.25);
+            border-radius: 8px;
+            padding: 4px 6px;
+        }
+
+        .plato-card.active .qty-control {
+            display: flex;
+        }
+
+        .qty-btn {
+            background: rgba(246, 184, 70, 0.3);
+            border: none;
+            color: var(--gold);
+            width: 22px;
+            height: 22px;
+            border-radius: 5px;
+            font-size: .9rem;
+            font-weight: 900;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Nunito', sans-serif;
+        }
+
+        .qty-input {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(246, 184, 70, 0.4);
+            border-radius: 5px;
+            color: #fff;
+            font-weight: 900;
+            font-size: .82rem;
+            width: 38px;
+            text-align: center;
+            font-family: 'Nunito', sans-serif;
+            padding: 2px 0;
+            outline: none;
+        }
+
+        .qty-label {
+            font-size: .6rem;
+            color: rgba(255, 255, 255, 0.5);
+            font-weight: 700;
+            letter-spacing: .5px;
+        }
+
+        .actions-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            gap: 10px;
+            padding: 13px 16px;
+            background: rgba(92, 24, 0, 0.95);
+            border-top: 1px solid rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(12px);
+            z-index: 100;
+        }
+
+        .btn-main {
+            flex: 1;
+            padding: 14px;
+            background: var(--green);
+            color: white;
+            font-weight: 900;
+            border: none;
+            border-radius: 12px;
+            font-size: .92rem;
+            cursor: pointer;
+            transition: transform .15s;
+        }
+
+        .btn-main:active {
+            transform: scale(.97);
+        }
+
+        .btn-main.blue {
+            background: #3B82F6;
+        }
+
+        .btn-main:disabled {
+            opacity: .4;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 200;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity .2s;
+        }
+
+        .modal-overlay.open {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .modal-sheet {
+            background: #1e0f08;
+            width: 100%;
+            max-width: 500px;
+            border-radius: 24px 24px 0 0;
+            padding: 24px;
+            border: 1px solid rgba(246, 184, 70, 0.2);
+            transform: translateY(100%);
+            transition: transform .3s cubic-bezier(.34, 1.3, .64, 1);
+        }
+
+        .modal-overlay.open .modal-sheet {
+            transform: translateY(0);
+        }
+
+        .modal-sheet h2 {
+            color: var(--gold);
+            font-weight: 900;
+            margin-bottom: 16px;
+            font-size: 1.1rem;
+        }
+
+        .inp-group {
+            margin-bottom: 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .inp-group label {
+            font-size: .78rem;
+            font-weight: 800;
+            color: rgba(255, 255, 255, 0.55);
+            text-transform: uppercase;
+            letter-spacing: .5px;
+        }
+
+        .inp-group input,
+        .inp-group select {
+            padding: 12px;
+            border: 1.5px solid rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: .95rem;
+            background: rgba(255, 255, 255, 0.08);
+            color: #fff;
+            outline: none;
+            font-family: 'Nunito', sans-serif;
+            transition: border-color .2s;
+        }
+
+        .inp-group input:focus,
+        .inp-group select:focus {
+            border-color: var(--mustard);
+        }
+
+        .inp-group select option {
+            background: #1e0f08;
+        }
+
+        .inp-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .btn-modal-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn-modal {
+            flex: 1;
+            padding: 13px;
+            background: var(--mustard);
+            color: var(--maroon);
+            font-weight: 900;
+            border: none;
+            border-radius: 12px;
+            font-size: .95rem;
+            cursor: pointer;
+        }
+
+        .btn-modal.cancel {
+            background: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        #export-wrap {
+            position: absolute;
+            left: -9999px;
+            top: 0;
+        }
+
+        #menu-canvas {
+            width: 1080px;
+            height: 1440px;
+            background: #7C2100;
+            color: #fff;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-sizing: border-box;
+            font-family: 'Nunito', sans-serif;
+        }
+
+        .mc-wave {
+            position: absolute;
+            bottom: -100px;
+            left: -10%;
+            width: 120%;
+            height: 500px;
+            background: #ECA322;
+            z-index: 2;
+            transform: rotate(-10deg);
+            transform-origin: left bottom;
+        }
+
+        .mc-content {
+            position: relative;
+            z-index: 3;
+            padding: 50px 60px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .mc-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .mc-title {
+            font-family: 'Great Vibes', cursive;
+            font-size: 130px;
+            color: #F6B846;
+            margin: 0;
+            line-height: 0.9;
+        }
+
+        .mc-date {
+            font-weight: 800;
+            font-size: 34px;
+            letter-spacing: 4px;
+            margin-top: 15px;
+            text-transform: uppercase;
+        }
+
+        .mc-subtitle {
+            font-weight: 900;
+            font-size: 38px;
+            color: #F6B846;
+            margin-top: 15px;
+            letter-spacing: 2px;
+            line-height: 1.3;
+        }
+
+        .mc-grid {
+            display: flex;
+            position: relative;
+            margin-top: 20px;
+        }
+
+        .mc-grid::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 10px;
+            bottom: 0;
+            width: 2px;
+            background: #fff;
+            opacity: 0.5;
+        }
+
+        .mc-col {
+            width: 50%;
+            padding: 0 30px;
+        }
+
+        .mc-col:first-child {
+            padding-left: 0;
+        }
+
+        .mc-cat-title {
+            font-size: 38px;
+            color: #F6B846;
+            font-weight: 900;
+            margin-bottom: 15px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .mc-list {
+            list-style: none;
+            padding: 0;
+            font-size: 34px;
+            font-weight: 800;
+            line-height: 1.4;
+            margin-bottom: 30px;
+        }
+
+        .mc-list li {
+            margin-bottom: 12px;
+            position: relative;
+            padding-left: 25px;
+            text-transform: uppercase;
+        }
+
+        .mc-list li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: #fff;
+            font-size: 38px;
+            line-height: 1;
+        }
+
+        .mc-extras {
+            text-align: center;
+            margin-top: -10px;
+            position: relative;
+            z-index: 3;
+        }
+
+        .mc-extras-title {
+            font-size: 38px;
+            color: #F6B846;
+            font-weight: 900;
+            letter-spacing: 3px;
+            margin: 15px 0;
+        }
+
+        .mc-extras-items {
+            font-size: 36px;
+            font-weight: 900;
+            line-height: 1.5;
+            text-transform: uppercase;
+        }
+
+        .mc-footer {
+            margin-top: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            z-index: 4;
+            position: relative;
+            height: 350px;
+        }
+
+        .mc-logo {
+            position: absolute;
+            bottom: -30px;
+            left: -30px;
+            width: 400px;
+        }
+
+        .mc-contact-wrap {
+            width: 55%;
+            margin-left: auto;
+            text-align: center;
+            color: #000;
+            padding-bottom: 40px;
+            position: relative;
+        }
+
+        .mc-contact-lbl {
+            font-weight: 900;
+            font-size: 22px;
+            margin-bottom: 15px;
+        }
+
+        .mc-contact-nums {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            font-size: 32px;
+            font-weight: 900;
+            margin-bottom: 20px;
+        }
+
+        .mc-loc {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            font-size: 22px;
+            font-weight: 800;
+            line-height: 1.3;
+        }
+
+        ::-webkit-scrollbar {
+            width: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 2px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="top-bar">
+        <h1>⚙️ Configurar Menú del Día</h1><span id="date-display"></span>
+    </div>
+    <div class="container" id="menu-container">
+        <div class="day-banner">
+            <div class="day-banner-title">Pensión Ekwe Iyawe</div>
+            <h2>Almuerzo del Día</h2>
+            <p>Selecciona platos y ajusta la cantidad de porciones disponibles</p>
+        </div>
+    </div>
+    <div class="actions-bar">
+        <button class="btn-main" onclick="guardarMenuDelDia()" id="btn-save">💾 Publicar Menú</button>
+        <button class="btn-main blue" onclick="generarImagenMenu()">📸 Imagen</button>
+    </div>
+    <div id="export-wrap">
+        <div id="menu-canvas">
+            <div class="mc-wave"></div>
+            <div class="mc-content">
+                <div class="mc-header">
+                    <h1 class="mc-title">Pensión Ekwe Iyawe</h1>
+                    <div class="mc-date" id="cv-date">HOY</div>
+                    <div class="mc-subtitle">MENÚ DE ALMUERZO</div>
+                </div>
+                <div class="mc-grid">
+                    <div class="mc-col">
+                        <div class="mc-cat-title">SOPA:</div>
+                        <ul class="mc-list" id="cv-sopas"></ul>
+                        <div class="mc-cat-title">SEGUNDOS:</div>
+                        <ul class="mc-list" id="cv-segundos"></ul>
+                    </div>
+                    <div class="mc-col">
+                        <div class="mc-cat-title">ENSALADA:</div>
+                        <ul class="mc-list" id="cv-ensaladas"></ul>
+                        <div class="mc-cat-title">REFRESCOS:</div>
+                        <ul class="mc-list" id="cv-refrescos"></ul>
+                    </div>
+                </div>
+                <div class="mc-extras">
+                    <div class="mc-extras-title">EXTRAS / POSTRES</div>
+                    <div class="mc-extras-items" id="cv-extras"></div>
+                </div>
+                <div class="mc-footer">
+                    <img src="/img/logo.png" class="mc-logo" crossorigin="anonymous" alt="Logo">
+                    <div class="mc-contact-wrap">
+                        <div class="mc-contact-lbl">Pedidos y reservas:</div>
+                        <div class="mc-contact-nums">
+                            <svg width="45" height="45" viewBox="0 0 24 24" fill="#25D366">
+                                <path
+                                    d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+                            </svg>
+                            <div style="text-align:left;line-height:1.1;">
+                                <div>64265030</div>
+                                <div>729266070</div>
+                            </div>
+                        </div>
+                        <div class="mc-loc"><span style="color:#EF4444;">📍</span><span>Av/pando rotonda de la av/27 de
+                                mayo al lado de la farmacia Cruz del sur</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-overlay" id="modal">
+        <div class="modal-sheet">
+            <h2 id="modal-title">Crear Nuevo Plato</h2>
+            <div class="inp-group"><label>Categoría</label>
+                <select id="m-cat">
+                    <option value="SOPAS">🍲 Sopas</option>
+                    <option value="SEGUNDOS">🍛 Segundos</option>
+                    <option value="ENSALADAS">🥗 Ensaladas</option>
+                    <option value="REFRESCOS">🥤 Refrescos</option>
+                    <option value="EXTRAS">🍟 Platos Extras</option>
+                    <option value="ANTOJITOS">🍮 Antojitos</option>
+                </select>
+            </div>
+            <div class="inp-group"><label>Nombre del Plato</label><input type="text" id="m-nom"
+                    placeholder="Ej: Arroz con leche" autocomplete="off"></div>
+            <div class="inp-row">
+                <div class="inp-group"><label>Precio (Bs)</label><input type="number" id="m-pre" placeholder="18.00"
+                        step="0.5" min="0"></div>
+                <div class="inp-group"><label>Porciones</label><input type="number" id="m-stock" placeholder="20"
+                        step="1" min="0"></div>
+            </div>
+            <div class="btn-modal-row">
+                <button class="btn-modal cancel" onclick="cerrarModal()">Cancelar</button>
+                <button class="btn-modal" onclick="guardarPlato()" id="btn-save-plato">✓ Guardar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══ MODAL: GESTIONAR PRESENTACIONES (tamaños/precios) ══ -->
+    <!-- Pegar antes de </body>, después del modal de crear plato -->
+    <div class="modal-overlay" id="modal-pres">
+        <div class="modal-sheet">
+            <h2 id="pres-modal-titulo">🥤 Tamaños — <span id="pres-plato-titulo"></span></h2>
+            <div id="pres-lista" style="margin-bottom:14px;"></div>
+            <div style="border-top:1px solid rgba(255,255,255,.12);padding-top:14px;">
+                <div style="font-size:.8rem;font-weight:700;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;">
+                    Añadir tamaño
+                </div>
+                <div class="inp-row">
+                    <div class="inp-group">
+                        <label>Nombre</label>
+                        <input type="text" id="pres-new-nombre" placeholder="Vaso / Jarra" autocomplete="off">
+                    </div>
+                    <div class="inp-group">
+                        <label>Precio (Bs)</label>
+                        <input type="number" id="pres-new-precio" placeholder="3" step="0.5" min="0">
+                    </div>
+                </div>
+                <div class="inp-row" style="margin-top:0;">
+                    <div class="inp-group">
+                        <label>Stock</label>
+                        <input type="number" id="pres-new-stock" placeholder="30" step="1" min="0">
+                    </div>
+                    <div class="inp-group" style="justify-content:flex-end;padding-top:24px;">
+                        <button class="btn-modal" onclick="presGuardarNuevo()" style="margin:0;">+ Agregar</button>
+                    </div>
+                </div>
+            </div>
+            <div class="btn-modal-row">
+                <button class="btn-modal cancel" onclick="cerrarModalPres()">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('date-display').textContent =
+            new Date().toLocaleDateString('es-BO', { weekday: 'long', day: 'numeric', month: 'long' }).toUpperCase();
+
+        const CATEGORIAS = ['SOPAS', 'SEGUNDOS', 'ENSALADAS', 'REFRESCOS', 'EXTRAS', 'ANTOJITOS'];
+        const CAT_META = {
+            SOPAS: { label: '🍲 Sopas', cls: '', titleCls: '' },
+            SEGUNDOS: { label: '🍛 Segundos', cls: '', titleCls: '' },
+            ENSALADAS: { label: '🥗 Ensalada', cls: '', titleCls: '' },
+            REFRESCOS: { label: '🥤 Refrescos', cls: '', titleCls: '' },
+            EXTRAS: { label: '🍟 Platos Extras', cls: 'extras', titleCls: 'extras-title' },
+            ANTOJITOS: { label: '🍮 Antojitos', cls: 'postres', titleCls: 'postres-title' }
+        };
+        const DEFAULT_CANT = { SOPAS: 20, SEGUNDOS: 20, ENSALADAS: 20, REFRESCOS: null, ANTOJITOS: 15, EXTRAS: 15 };
+
+        document.getElementById('m-cat').addEventListener('change', function() {
+            const isRefresco = this.value === 'REFRESCOS';
+            // Oculta la fila completa de precio y stock si es refresco
+            document.getElementById('m-pre').closest('.inp-row').style.display = isRefresco ? 'none' : 'grid';
+        });
+
+        let catalogoMaestro = [], seleccionadosHoy = new Set(), cantidadesHoy = {}, editandoId = null;
+
+        async function cargarCatalogo() {
+            try {
+                const res = await fetch('/api/platos/todos'); catalogoMaestro = await res.json();
+                const cantAnt = { ...cantidadesHoy }, selAnt = new Set(seleccionadosHoy);
+                seleccionadosHoy.clear();
+                catalogoMaestro.forEach(p => {
+                    if (p.disponible) {
+                        seleccionadosHoy.add(p.id);
+                        cantidadesHoy[p.id] = cantAnt[p.id] !== undefined ? cantAnt[p.id] : (p.stockDisponible ?? DEFAULT_CANT[p.categoria] ?? 20);
+                    }
+                });
+                selAnt.forEach(id => { if (!seleccionadosHoy.has(id)) { const p = catalogoMaestro.find(x => x.id === id); if (p) { seleccionadosHoy.add(id); if (cantAnt[id] !== undefined) cantidadesHoy[id] = cantAnt[id]; } } });
+                if (seleccionadosHoy.size > 0) document.getElementById('btn-save').innerHTML = '💾 Actualizar Menú';
+                renderizarCategorias();
+            } catch (e) { console.error(e); }
+        }
+
+        function renderizarCategorias() {
+            const container = document.getElementById('menu-container');
+            const banner = container.querySelector('.day-banner').outerHTML;
+            container.innerHTML = banner;
+            CATEGORIAS.forEach(cat => {
+                const meta = CAT_META[cat] || { label: cat, cls: '', titleCls: '' };
+                const platos = catalogoMaestro.filter(p => p.categoria.toUpperCase() === cat);
+                const section = document.createElement('div');
+                section.className = `cat-section${meta.cls ? ' ' + meta.cls : ''}`;
+                const grid = platos.map(p => {
+                    const activo = seleccionadosHoy.has(p.id), qty = cantidadesHoy[p.id] ?? DEFAULT_CANT[cat] ?? 20;
+                    return `<div class="plato-card${activo ? ' active' : ''}" id="card-${p.id}" onclick="togglePlato(${p.id},'${cat}')">
+        
+                        <button class="btn-edit" style="left:4px;" onclick="abrirModalEdicion(event,${p.id})">✏️</button>
+                        
+                        <button class="btn-edit" style="left:32px; background: rgba(59, 130, 246, 0.4); border-color: rgba(59, 130, 246, 0.6);" onclick="abrirModalPresentaciones(event, ${p.id}, '${p.nombre.replace(/'/g, "\\'")}')" title="Configurar Tamaños">🥤</button>
+                        
+                        ${p.presentaciones && p.presentaciones.length > 0 ? `<div style="position:absolute;bottom:28px;left:0;right:0;background:rgba(246,184,70,.15);font-size:.6rem;font-weight:800;color:var(--gold);text-align:center;padding:2px;">${p.presentaciones.length} tamaños</div>` : ''}
+                        <div class="p-name">${p.nombre}</div><div class="p-price">Bs. ${p.precio}</div>
+                        <div class="qty-control" id="qty-${p.id}" onclick="event.stopPropagation()">
+                            <button class="qty-btn" onclick="adjQty(${p.id},-5)">-5</button>
+                            <button class="qty-btn" onclick="adjQty(${p.id},-1)">−</button>
+                            <input class="qty-input" id="qn-${p.id}" type="number" value="${qty}" min="0" step="1"
+                                onchange="setQty(${p.id},this.value)" onclick="event.stopPropagation()">
+                            <button class="qty-btn" onclick="adjQty(${p.id},1)">+</button>
+                            <button class="qty-btn" onclick="adjQty(${p.id},5)">+5</button>
+                        </div>
+                        <span class="qty-label" id="ql-${p.id}" style="${activo ? '' : 'display:none'}">porciones</span>
+                    </div>`;
+                }).join('');
+                section.innerHTML = `<div class="cat-head">
+                <span class="cat-title${meta.titleCls ? ' ' + meta.titleCls : ''}">${meta.label}</span>
+                        <button style="background:rgba(59,130,246,.2);color:#93C5FD;border:1px solid rgba(59,130,246,.3);padding:6px 10px;border-radius:8px;font-size:.75rem;font-weight:800;cursor:pointer;"
+            onclick="abrirModalNueva('${cat}')">+ Plato</button>
+            </div><div class="platos-grid">${grid || `<div style="font-size:.8rem;color:rgba(255,255,255,0.4);padding:8px 0;">No hay platos en ${meta.label}</div>`}</div>`;
+                container.appendChild(section);
+            });
+        }
+
+        function togglePlato(id, cat) {
+            const card = document.getElementById('card-' + id), ql = document.getElementById('ql-' + id);
+            if (seleccionadosHoy.has(id)) { seleccionadosHoy.delete(id); card.classList.remove('active'); if (ql) ql.style.display = 'none'; }
+            else { seleccionadosHoy.add(id); if (cantidadesHoy[id] === undefined) cantidadesHoy[id] = DEFAULT_CANT[cat] ?? 20; card.classList.add('active'); if (ql) ql.style.display = ''; }
+        }
+        // 3. Adaptar los botones de Sumar y Restar de la tarjeta para que soporten "Infinito" (null)
+        function setQty(id, v) { 
+            if (v === '') cantidadesHoy[id] = null; // Si borran el número, se vuelve infinito
+            else cantidadesHoy[id] = Math.max(0, parseInt(v, 10) || 0); 
+        }
+
+        function adjQty(id, delta) { 
+            if (cantidadesHoy[id] === null) return; // Si es infinito, sumar o restar no hace nada
+            cantidadesHoy[id] = Math.max(0, (cantidadesHoy[id] ?? 0) + delta); 
+            const el = document.getElementById('qn-' + id); 
+            if (el) el.value = cantidadesHoy[id]; 
+        }
+
+        async function guardarMenuDelDia() {
+            const btn = document.getElementById('btn-save'); btn.innerHTML = '⏳ Publicando...'; btn.disabled = true;
+    
+            // AQUÍ EL CAMBIO CLAVE: no ponemos "?? 20". Enviamos el valor real, que puede ser null.
+            const payload = Array.from(seleccionadosHoy).map(id => ({ id, cantidad: cantidadesHoy[id] }));
+            
+            try {
+                const res = await fetch('/api/menu-diario', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+                if (!res.ok) throw new Error('HTTP ' + res.status);
+                btn.style.background = '#3B82F6'; btn.innerHTML = '✅ ¡Menú Publicado!';
+                setTimeout(() => { btn.style.background = 'var(--green)'; btn.innerHTML = '💾 Actualizar Menú'; btn.disabled = false; }, 3000);
+            } catch (e) { alert('Error: ' + e.message); btn.innerHTML = '💾 Publicar Menú'; btn.disabled = false; }
+        }
+
+        function abrirModalNueva(cat) {
+            editandoId = null;
+            document.getElementById('modal-title').textContent = 'Crear Nuevo Plato';
+            document.getElementById('m-cat').value = cat;
+            document.getElementById('m-nom').value = '';
+            document.getElementById('m-pre').value = (cat === 'ANTOJITOS' || cat === 'POSTRES') ? '15' : '18';
+            document.getElementById('m-stock').value = DEFAULT_CANT[cat] ?? 20;
+            document.getElementById('m-cat').dispatchEvent(new Event('change'));
+            document.getElementById('modal').classList.add('open');
+            setTimeout(() => document.getElementById('m-nom').focus(), 300);
+        }
+        function abrirModalEdicion(event, id) {
+            event.stopPropagation();
+            const p = catalogoMaestro.find(x => x.id === id); if (!p) return;
+            editandoId = id;
+            document.getElementById('modal-title').textContent = 'Editar Plato';
+            document.getElementById('m-cat').value = p.categoria;
+            document.getElementById('m-nom').value = p.nombre;
+            document.getElementById('m-pre').value = p.precio;
+            document.getElementById('m-stock').value = cantidadesHoy[id] ?? p.stockDisponible ?? 0;
+            document.getElementById('m-cat').dispatchEvent(new Event('change'));
+            document.getElementById('modal').classList.add('open');
+            setTimeout(() => document.getElementById('m-nom').focus(), 300);
+        }
+        function cerrarModal() { document.getElementById('modal').classList.remove('open'); }
+
+        async function guardarPlato() {
+            const btn = document.getElementById('btn-save-plato');
+            const nom = document.getElementById('m-nom').value.trim();
+            const cat = document.getElementById('m-cat').value;
+
+            const preVal = document.getElementById('m-pre').value;
+            const pre = (cat === 'REFRESCOS' || preVal === '') ? 0 : parseFloat(preVal);
+
+            const mStockVal = document.getElementById('m-stock').value;
+            const stock = mStockVal === '' ? null : parseInt(mStockVal, 10);
+
+            btn.disabled = true; btn.innerHTML = '...';
+            try {
+                const method = editandoId ? 'PUT' : 'POST', url = editandoId ? '/api/platos/' + editandoId : '/api/platos';
+                const res = await fetch(url, { method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ nombre: nom, precio: pre, categoria: cat, stockDisponible: stock }) });
+                if (!res.ok) throw new Error('HTTP ' + res.status);
+                const g = await res.json(); cantidadesHoy[g.id] = stock; 
+                seleccionadosHoy.add(g.id); // Siempre lo marcamos como activo al crearlo
+                await cargarCatalogo(); cerrarModal();
+            } catch (e) { alert('Error: ' + e.message); }
+            finally { btn.disabled = false; btn.innerHTML = '✓ Guardar'; }
+        }
+
+        async function generarImagenMenu() {
+            const dias = ['DOMINGO', 'LUNES', 'MARTES', 'MIÉRCOLES', 'JUEVES', 'VIERNES', 'SÁBADO'];
+            const meses = ['ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO', 'JUNIO', 'JULIO', 'AGOSTO', 'SEPTIEMBRE', 'OCTUBRE', 'NOVIEMBRE', 'DICIEMBRE'];
+            const d = new Date();
+            document.getElementById('cv-date').textContent = `HOY ${dias[d.getDay()]} ${d.getDate()} DE ${meses[d.getMonth()]}`;
+            const activos = catalogoMaestro.filter(p => seleccionadosHoy.has(p.id));
+            const mapear = cat => activos.filter(p => p.categoria.toUpperCase() === cat).map(p => `<li>${p.nombre}</li>`).join('');
+            document.getElementById('cv-sopas').innerHTML = mapear('SOPAS');
+            document.getElementById('cv-segundos').innerHTML = mapear('SEGUNDOS');
+            document.getElementById('cv-ensaladas').innerHTML = mapear('ENSALADAS');
+            document.getElementById('cv-refrescos').innerHTML = mapear('REFRESCOS');
+            document.getElementById('cv-extras').innerHTML = activos.filter(p => p.categoria === 'ANTOJITOS' || p.categoria === 'POSTRES').map(p => `<div>${p.nombre}</div>`).join('');
+            try {
+                const canvas = await html2canvas(document.getElementById('menu-canvas'), { scale: 2, useCORS: true, allowTaint: true, backgroundColor: '#7C2100' });
+                const link = document.createElement('a');
+                link.download = `Menu_EkweIyawe_${d.getDate()}_${meses[d.getMonth()]}.jpg`;
+                link.href = canvas.toDataURL('image/jpeg', 0.95); link.click();
+            } catch (err) { alert('Error al generar imagen.'); }
+        }
+        cargarCatalogo();
+
+        // ─── Estado presentaciones ────────────────────────────────────────────────────
+        let presEditandoPlatoId = null;
+        let presEditandoPlatoNombre = '';
+        
+        // ─── Abrir modal de presentaciones ────────────────────────────────────────────
+        async function abrirModalPresentaciones(event, platoId, platoNombre) {
+            event.stopPropagation();
+            presEditandoPlatoId = platoId;
+            presEditandoPlatoNombre = platoNombre;
+            document.getElementById('pres-plato-titulo').textContent = platoNombre;
+            document.getElementById('pres-new-nombre').value = '';
+            document.getElementById('pres-new-precio').value = '';
+            document.getElementById('pres-new-stock').value = '30';
+            await cargarPresentaciones();
+            document.getElementById('modal-pres').classList.add('open');
+            setTimeout(() => document.getElementById('pres-new-nombre').focus(), 300);
+        }
+        
+        function cerrarModalPres() { document.getElementById('modal-pres').classList.remove('open'); }
+        
+        // ─── Cargar y renderizar presentaciones ───────────────────────────────────────
+        async function cargarPresentaciones() {
+            const container = document.getElementById('pres-lista');
+            try {
+                const res = await fetch(`/api/platos/${presEditandoPlatoId}/presentaciones`);
+                const lista = await res.json();
+                if (!lista.length) {
+                    container.innerHTML = `<p style="font-size:.8rem;color:rgba(255,255,255,.35);text-align:center;padding:8px 0;">
+                        Sin tamaños configurados. Este plato usará su precio base al registrar pedidos.</p>`;
+                    return;
+                }
+                container.innerHTML = lista.map(pr => `
+                    <div id="pres-row-${pr.id}" style="display:flex;align-items:center;gap:8px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.1);">
+                        <div style="flex:1;">
+                            <span style="font-weight:800;font-size:.9rem;color:#fff;">${pr.nombre}</span>
+                            <span style="font-size:.8rem;color:var(--gold);font-weight:900;margin-left:8px;">Bs. ${pr.precio}</span>
+                            ${pr.stockDisponible != null ? `<span style="font-size:.7rem;background:rgba(255,255,255,.1);border-radius:5px;padding:1px 6px;margin-left:5px;color:rgba(255,255,255,.5);">${pr.stockDisponible} porciones</span>` : ''}
+                            ${!pr.disponible ? `<span style="font-size:.7rem;background:#FEE2E2;color:#991B1B;border-radius:5px;padding:1px 6px;margin-left:5px;">Inactivo</span>` : ''}
+                        </div>
+                        <button onclick="presToggleDisponible(${pr.id}, ${!pr.disponible})"
+                            style="background:${pr.disponible?'rgba(239,68,68,.15)':'rgba(34,197,94,.15)'};border:1px solid ${pr.disponible?'rgba(239,68,68,.3)':'rgba(34,197,94,.3)'};color:${pr.disponible?'#FCA5A5':'#86EFAC'};border-radius:6px;padding:4px 9px;font-size:.72rem;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif;">
+                            ${pr.disponible?'Desactivar':'Activar'}
+                        </button>
+                        <button onclick="presEliminar(${pr.id})"
+                            style="background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.2);color:#FCA5A5;border-radius:6px;padding:4px 8px;font-size:.72rem;cursor:pointer;font-family:'Nunito',sans-serif;">
+                            ✕
+                        </button>
+                    </div>`).join('');
+            } catch(e) {
+                container.innerHTML = `<p style="color:#FCA5A5;font-size:.8rem;">Error al cargar tamaños</p>`;
+            }
+        }
+        
+        // ─── Guardar nueva presentación ───────────────────────────────────────────────
+        async function presGuardarNuevo() {
+            const nombre = document.getElementById('pres-new-nombre').value.trim();
+            const precio = parseFloat(document.getElementById('pres-new-precio').value);
+            const pStockVal = document.getElementById('pres-new-stock').value;
+            const stock = pStockVal === '' ? null : parseInt(pStockVal, 10);
+            if (!nombre || isNaN(precio)) return alert('Completa nombre y precio');
+            try {
+                const res = await fetch(`/api/platos/${presEditandoPlatoId}/presentaciones`, {
+                    method: 'POST',
+                    headers: {'Content-Type':'application/json'},
+                    body: JSON.stringify({ nombre, precio, stockDisponible: stock, disponible: true })
+                });
+                if (!res.ok) throw new Error('HTTP ' + res.status);
+                document.getElementById('pres-new-nombre').value = '';
+                document.getElementById('pres-new-precio').value = '';
+                await cargarPresentaciones();
+                // Actualizar la tarjeta del plato en la página
+                await cargarCatalogo();
+            } catch(e) { alert('Error al guardar: ' + e.message); }
+        }
+        
+        // ─── Toggle disponible ────────────────────────────────────────────────────────
+        async function presToggleDisponible(presId, nuevaDisponibilidad) {
+            try {
+                await fetch(`/api/presentaciones/${presId}`, {
+                    method: 'PUT',
+                    headers: {'Content-Type':'application/json'},
+                    body: JSON.stringify({ disponible: nuevaDisponibilidad })
+                });
+                await cargarPresentaciones();
+            } catch(e) { alert('Error: ' + e.message); }
+        }
+        
+        // ─── Eliminar presentación ────────────────────────────────────────────────────
+        async function presEliminar(presId) {
+            if (!confirm('¿Eliminar este tamaño?')) return;
+            try {
+                await fetch(`/api/presentaciones/${presId}`, { method: 'DELETE' });
+                await cargarPresentaciones();
+                await cargarCatalogo();
+            } catch(e) { alert('Error al eliminar: ' + e.message); }
+        }
+    </script>
+</body>
+
+</html>

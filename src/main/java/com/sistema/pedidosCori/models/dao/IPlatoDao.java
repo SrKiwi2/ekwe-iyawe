@@ -25,4 +25,8 @@ public interface IPlatoDao extends JpaRepository<Plato, Long> {
     void marcarComoDisponibles(@Param("ids") List<Long> ids);
 
     Optional<Plato> findByNombre(String nombre);
+
+    @Modifying
+    @Query("UPDATE Plato p SET p.stockDisponible = p.stockDisponible - :cantidad WHERE p.id = :id AND p.stockDisponible >= :cantidad")
+    int descontarStockPreciso(@Param("id") Long id, @Param("cantidad") Integer cantidad);
 }

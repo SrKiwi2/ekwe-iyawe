@@ -277,23 +277,47 @@ public class ApiController {
     }
  
     private void aplicarDescuentoStock(Map<Long,Integer> descPlato, Map<Long,Integer> descPres, Map<Long,Integer> descSopa) {
-        descPlato.forEach((pid,q) -> platoDao.findById(pid).ifPresent(p -> {
-            if (p.getStockDisponible() != null) {
-                int n = Math.max(0, p.getStockDisponible()-q); p.setStockDisponible(n); platoDao.save(p);
-                messagingTemplate.convertAndSend("/topic/stock", StockUpdateDTO.builder().platoId(p.getId()).stockRestante(n).nombrePlato(p.getNombre()).build());
-            }
-        }));
-        descPres.forEach((presId,q) -> presentacionPlatoDao.findById(presId).ifPresent(pres -> {
-            if (pres.getStockDisponible() != null) {
-                int n = Math.max(0, pres.getStockDisponible()-q); pres.setStockDisponible(n); presentacionPlatoDao.save(pres);
-                messagingTemplate.convertAndSend("/topic/stock", StockUpdateDTO.builder().platoId(pres.getPlato().getId()).stockRestante(n).nombrePlato(pres.getPlato().getNombre()+" – "+pres.getNombre()).build());
-            }
-        }));
-        descSopa.forEach((sid,q) -> platoDao.findById(sid).ifPresent(s -> {
-            if (s.getStockDisponible() != null) {
-                int n = Math.max(0, s.getStockDisponible()-q); s.setStockDisponible(n); platoDao.save(s);
-                messagingTemplate.convertAndSend("/topic/stock", StockUpdateDTO.builder().platoId(s.getId()).stockRestante(n).nombrePlato(s.getNombre()).build());
-            }
-        }));
+        
+        // 1. Descontar Platos Base (Segundos, Ensaladas, etc.)
+        descPlato.forEach((pid, q) -> {
+            platoDao.findById(pid).ifPresent(p -> {
+                if (p.getStockDisponible() != null) { // Si no es infinito
+                    int filasAfectadas = platoDao.descontarStockPreciso(pid, q);
+                    if (filasAfectadas == 0) {
+                        throw new RuntimeException("Stock insuficiente para el plato: " + p.getNombre());
+                    }
+                    int nuevoStock = p.getStockDisponible() - q;
+                    messagingTemplate.convertAndSend("/topic/stock", StockUpdateDTO.builder().platoId(p.getId()).stockRestante(nuevoStock).nombrePlato(p.getNombre()).build());
+                }
+            });
+        });
+
+        // 2. Descontar Presentaciones (Vasos, Jarras, etc.)
+        descPres.forEach((presId, q) -> {
+            presentacionPlatoDao.findById(presId).ifPresent(pres -> {
+                if (pres.getStockDisponible() != null) { // Si no es infinito
+                    int filasAfectadas = presentacionPlatoDao.descontarStockPreciso(presId, q);
+                    if (filasAfectadas == 0) {
+                        throw new RuntimeException("Stock insuficiente para el tamaño: " + pres.getNombre() + " de " + pres.getPlato().getNombre());
+                    }
+                    int nuevoStock = pres.getStockDisponible() - q;
+                    messagingTemplate.convertAndSend("/topic/stock", StockUpdateDTO.builder().platoId(pres.getPlato().getId()).stockRestante(nuevoStock).nombrePlato(pres.getPlato().getNombre() + " – " + pres.getNombre()).build());
+                }
+            });
+        });
+
+        // 3. Descontar Sopas Acompañantes
+        descSopa.forEach((sid, q) -> {
+            platoDao.findById(sid).ifPresent(s -> {
+                if (s.getStockDisponible() != null) { // Si no es infinita
+                    int filasAfectadas = platoDao.descontarStockPreciso(sid, q);
+                    if (filasAfectadas == 0) {
+                        throw new RuntimeException("Stock insuficiente de la sopa: " + s.getNombre());
+                    }
+                    int nuevoStock = s.getStockDisponible() - q;
+                    messagingTemplate.convertAndSend("/topic/stock", StockUpdateDTO.builder().platoId(s.getId()).stockRestante(nuevoStock).nombrePlato(s.getNombre()).build());
+                }
+            });
+        });
     }
 }

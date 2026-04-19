@@ -344,4 +344,17 @@ public class ApiController {
             });
         });
     }
+
+    /**
+     * Devuelve los números de mesa que tienen pedidos activos sin pagar.
+     * GET /api/mesas/ocupadas
+     * Respuesta: [2, 5, 7]  (lista de números de mesa)
+     */
+    @GetMapping("/mesas/ocupadas")
+    public ResponseEntity<List<Integer>> getMesasOcupadas() {
+        List<Integer> ocupadas = pedidoDao.findMesasOcupadas(
+            List.of(EstadoPedido.PENDIENTE, EstadoPedido.EN_PREPARACION, EstadoPedido.LISTO)
+        );
+        return ResponseEntity.ok(ocupadas);
+    }
 }

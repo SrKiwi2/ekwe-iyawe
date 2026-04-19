@@ -10,6 +10,8 @@ import com.sistema.pedidosCori.models.entity.Pedido;
 public interface IPedidoDao extends JpaRepository<Pedido, Long> {
     List<Pedido> findByEstadoOrderByFechaCreacionAsc(EstadoPedido estado);
     List<Pedido> findByEstadoInOrderByFechaCreacionAsc(List<EstadoPedido> estados);
+
+    List<Pedido> findByEstadoInAndPagadoFalseOrderByFechaCreacionAsc(List<EstadoPedido> estados);
     List<Pedido> findByNumeroMesaAndEstadoIn(Integer mesa, List<EstadoPedido> estados);
 
     List<Pedido> findByPagadoTrue();

@@ -97,8 +97,9 @@ public class PedidoServiceImpl implements IPedidoService{
  
     @Override
     public List<Pedido> obtenerPedidosActivos() {
-        return pedidoDao.findByEstadoInOrderByFechaCreacionAsc(
-            List.of(EstadoPedido.PENDIENTE, EstadoPedido.EN_PREPARACION, EstadoPedido.LISTO));
+        return pedidoDao.findByEstadoInAndPagadoFalseOrderByFechaCreacionAsc(
+        List.of(EstadoPedido.PENDIENTE, EstadoPedido.EN_PREPARACION, EstadoPedido.LISTO)
+    );
     }
  
     @Override

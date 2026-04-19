@@ -1377,6 +1377,20 @@
             animation: tin .2s ease both;
             pointer-events: all;
             box-shadow: var(--shadow);
+            cursor: pointer;            /* indica que es clickeable */
+            user-select: none;
+            touch-action: pan-x;        /* permite swipe horizontal */
+            transition: transform .2s ease, opacity .2s ease;
+            will-change: transform, opacity;
+        }
+
+        .toast-close {
+            margin-left: auto;
+            flex-shrink: 0;
+            font-size: .75rem;
+            font-weight: 900;
+            color: var(--text2);
+            padding: 0 2px;
         }
 
         @keyframes tin {
@@ -1640,6 +1654,34 @@
         .logo-ping {
             animation: logo-ping .2s ease;
         }
+
+        .admin-dot {
+            width: 15px; height: 15px; border-radius: 50%;
+            border: 2px solid rgba(255,255,255,0.2);
+            background: transparent; transition: all .12s;
+        }
+        .admin-dot.filled  { background: #F6B846; border-color: #F6B846; box-shadow: 0 0 8px rgba(246,184,70,.5); }
+        .admin-dot.error   { background: #EF4444; border-color: #EF4444; animation: admin-shake .35s ease; }
+        .admin-dot.success { background: #22C55E; border-color: #22C55E; }
+        
+        @keyframes admin-shake {
+            0%,100%{transform:translateX(0)} 20%{transform:translateX(-6px)} 60%{transform:translateX(6px)}
+        }
+        
+        .admin-key {
+            background: rgba(255,255,255,0.07);
+            border: 1.5px solid rgba(255,255,255,0.1);
+            border-radius: 13px; color: #fff;
+            font-size: 1.25rem; font-weight: 800;
+            font-family: 'Nunito', sans-serif;
+            padding: 15px 0; cursor: pointer;
+            transition: all .1s; text-align: center;
+        }
+        .admin-key:active { background: rgba(246,184,70,.22); border-color: #F6B846; transform: scale(.92); }
+        .admin-del { font-size: 1rem; color: rgba(255,255,255,0.45); }
+        
+        #admin-overlay.open { opacity: 1; pointer-events: all; }
+        #admin-overlay.open #admin-box { transform: none; }
     </style>
 </head>
 
@@ -1686,6 +1728,15 @@
                 <div class="tc-inf">
                     <div class="tc-nm">Pedidos Activos</div>
                     <div class="tc-sb">Cobrar y ver estado de cocina</div>
+                </div>
+                <span class="tc-ar">›</span>
+            </button>
+            <button class="tc" style="border-color:rgba(246,184,70,0.35);background:rgba(246,184,70,0.08);max-width:380px;width:100%;"
+                onclick="AdminAccess.open()">
+                <span class="tc-em">⚙️</span>
+                <div class="tc-inf">
+                    <div class="tc-nm" style="color:#F6B846;">Panel del dueño</div>
+                    <div class="tc-sb">Configurar menú y precios</div>
                 </div>
                 <span class="tc-ar">›</span>
             </button>
@@ -1907,6 +1958,61 @@
         </div>
     </div>
 
+    <div id="admin-overlay" style="
+        position:fixed; inset:0; background:rgba(0,0,0,0.8);
+        z-index:600; display:flex; align-items:center; justify-content:center;
+        opacity:0; pointer-events:none; transition:opacity .22s;">
+        <div id="admin-box" style="
+            background:#1a0d06; border:1.5px solid rgba(246,184,70,0.3);
+            border-radius:24px; padding:28px 22px 22px;
+            width:min(320px,90vw); display:flex; flex-direction:column;
+            align-items:center; gap:16px;
+            transform:translateY(16px) scale(.96);
+            transition:transform .28s cubic-bezier(.34,1.3,.64,1);">
+    
+            <!-- Logo pequeño -->
+            <img src="/img/logo.png" alt="Logo"
+                style="width:56px;height:56px;border-radius:12px;object-fit:cover;">
+    
+            <div style="font-weight:900;font-size:1rem;color:#F6B846;text-align:center;letter-spacing:.5px;">
+                Panel de Administración
+            </div>
+            <div style="font-size:.75rem;color:rgba(255,255,255,.35);font-weight:600;margin-top:-10px;">
+                Acceso solo para el propietario
+            </div>
+    
+            <!-- Puntos indicadores de PIN -->
+            <div id="admin-dots" style="display:flex;gap:14px;">
+                <div class="admin-dot" id="adot-0"></div>
+                <div class="admin-dot" id="adot-1"></div>
+                <div class="admin-dot" id="adot-2"></div>
+                <div class="admin-dot" id="adot-3"></div>
+            </div>
+    
+            <!-- Teclado numérico -->
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;width:100%;">
+                <button class="admin-key" onclick="AdminAccess.press('1')">1</button>
+                <button class="admin-key" onclick="AdminAccess.press('2')">2</button>
+                <button class="admin-key" onclick="AdminAccess.press('3')">3</button>
+                <button class="admin-key" onclick="AdminAccess.press('4')">4</button>
+                <button class="admin-key" onclick="AdminAccess.press('5')">5</button>
+                <button class="admin-key" onclick="AdminAccess.press('6')">6</button>
+                <button class="admin-key" onclick="AdminAccess.press('7')">7</button>
+                <button class="admin-key" onclick="AdminAccess.press('8')">8</button>
+                <button class="admin-key" onclick="AdminAccess.press('9')">9</button>
+                <button class="admin-key admin-del" onclick="AdminAccess.del()">⌫</button>
+                <button class="admin-key" style="grid-column:2;" onclick="AdminAccess.press('0')">0</button>
+            </div>
+    
+            <button onclick="AdminAccess.close()"
+                style="background:none;border:none;color:rgba(255,255,255,.25);
+                    font-size:.75rem;font-weight:700;font-family:'Nunito',sans-serif;
+                    cursor:pointer;padding:2px 0;letter-spacing:.5px;">
+                Cancelar
+            </button>
+        </div>
+    </div>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
     <script>
@@ -2017,13 +2123,77 @@
         /* ─── Toast ─── */
         const Toast = {
             _area: null,
-            _init() { this._area = document.getElementById('toasts'); },
+        
+            _init() {
+                this._area = document.getElementById('toasts');
+            },
+        
             show(type, icon, title, msg = '') {
                 if (!this._area) this._init();
-                const t = document.createElement('div'); t.className = `toast ${type}`;
-                t.innerHTML = `<span class="ti">${icon}</span><div class="tb"><div class="tt">${title}</div>${msg ? `<div class="tm">${msg}</div>` : ''}</div>`;
+        
+                const t = document.createElement('div');
+                t.className = `toast ${type}`;
+                t.innerHTML = `
+                    <span class="ti">${icon}</span>
+                    <div class="tb" style="flex:1;">
+                        <div class="tt">${title}</div>
+                        ${msg ? `<div class="tm">${msg}</div>` : ''}
+                    </div>
+                    <span class="toast-close">✕</span>`;
+        
                 this._area.appendChild(t);
-                setTimeout(() => { t.style.transition = '.3s ease'; t.style.opacity = '0'; setTimeout(() => t.remove(), 350); }, CONFIG.TOAST_DURATION_MS);
+        
+                /* Auto-dismiss */
+                const timer = setTimeout(() => this._dismiss(t), CONFIG.TOAST_DURATION_MS);
+        
+                /* Click en cualquier parte del toast → cerrar inmediatamente */
+                t.addEventListener('click', () => {
+                    clearTimeout(timer);
+                    this._dismiss(t);
+                });
+        
+                /* Swipe para descartar (horizontal o hacia arriba) */
+                let startX = 0, startY = 0, dragging = false;
+        
+                t.addEventListener('touchstart', e => {
+                    startX = e.touches[0].clientX;
+                    startY = e.touches[0].clientY;
+                    dragging = true;
+                }, { passive: true });
+        
+                t.addEventListener('touchmove', e => {
+                    if (!dragging) return;
+                    const dx = e.touches[0].clientX - startX;
+                    const dy = e.touches[0].clientY - startY;
+                    /* Seguir el dedo si el movimiento es mayormente horizontal o hacia arriba */
+                    if (Math.abs(dx) > Math.abs(dy) || dy < 0) {
+                        t.style.transform = `translateX(${dx}px) translateY(${Math.min(dy, 0)}px)`;
+                        t.style.opacity   = `${Math.max(0, 1 - Math.abs(dx) / 120)}`;
+                    }
+                }, { passive: true });
+        
+                t.addEventListener('touchend', e => {
+                    if (!dragging) return;
+                    dragging = false;
+                    const dx = e.changedTouches[0].clientX - startX;
+                    const dy = e.changedTouches[0].clientY - startY;
+                    /* Si arrastró más de 60px horizontal o 40px hacia arriba → descartar */
+                    if (Math.abs(dx) > 60 || dy < -40) {
+                        clearTimeout(timer);
+                        this._dismiss(t);
+                    } else {
+                        /* Volver a posición original */
+                        t.style.transform = '';
+                        t.style.opacity   = '';
+                    }
+                }, { passive: true });
+            },
+        
+            _dismiss(t) {
+                t.style.transition = 'opacity .25s ease, transform .25s ease';
+                t.style.opacity    = '0';
+                t.style.transform  = 'translateY(-8px)';
+                setTimeout(() => t.remove(), 260);
             }
         };
 
@@ -2197,55 +2367,117 @@
 
         /* ─── PresentacionDrawer ── (★ NUEVO) ─── */
         const PresentacionDrawer = {
-            _platoId: null, _selectedPres: null,
-
-            open(platoObj) {
-                this._platoId = platoObj.id; this._selectedPres = null;
-                document.getElementById('pres-plato-em').textContent = MenuView._emojiFor(platoObj.categoria);
+            _platoId:   null,
+            _selectedPres: null,
+        
+            /**
+             * Abre el drawer de selección de tamaño para un plato con presentaciones.
+             * @param platoObj  - objeto plato del catálogo
+             * Filtra las presentaciones según State.order.tipo (mesa | llevar)
+             */
+            async open(platoObj) {
+                this._platoId      = platoObj.id;
+                this._selectedPres = null;
+        
+                document.getElementById('pres-plato-em').textContent   = MenuView._emojiFor(platoObj.categoria);
                 document.getElementById('pres-plato-name').textContent = platoObj.nombre;
-                document.getElementById('pres-plato-prc').textContent = 'Elige el tamaño';
-                document.getElementById('pres-confirm-btn').disabled = true;
-
-                const container = document.getElementById('pres-options'); container.innerHTML = '';
-                const pres = (platoObj.presentaciones || []).filter(pr => {
-                    // Solo mostrar presentaciones disponibles con stock
+                document.getElementById('pres-plato-prc').textContent  = 'Elige el tamaño';
+                document.getElementById('pres-confirm-btn').disabled   = true;
+        
+                const container = document.getElementById('pres-options');
+                container.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text2);font-size:.82rem;">Cargando tamaños…</div>';
+        
+                document.getElementById('pres-backdrop').classList.add('open');
+                document.getElementById('pres-drawer').classList.add('open');
+        
+                try {
+                    // ★ NUEVO: pasar el tipo del pedido para filtrar por modalidad en el servidor
+                    //   tipo = 'mesa' → ?tipo=MESA  →  servidor devuelve presentaciones MESA + AMBAS
+                    //   tipo = 'llevar' → ?tipo=LLEVAR → servidor devuelve presentaciones LLEVAR + AMBAS
+                    const tipoParam = State.order.tipo === 'llevar' ? 'LLEVAR' : 'MESA';
+                    const presentaciones = await fetch(
+                        `/api/platos/${platoObj.id}/presentaciones?tipo=${tipoParam}`
+                    ).then(r => r.ok ? r.json() : []);
+        
+                    this._renderOpciones(platoObj, presentaciones);
+                } catch(err) {
+                    console.error('[PresentacionDrawer] Error al cargar presentaciones:', err);
+                    // Si falla la llamada, mostrar todas las presentaciones en memoria
+                    this._renderOpciones(platoObj, platoObj.presentaciones ?? []);
+                }
+            },
+        
+            _renderOpciones(platoObj, presentaciones) {
+                const container = document.getElementById('pres-options');
+                container.innerHTML = '';
+        
+                // Filtrar solo las disponibles con stock
+                const disponibles = presentaciones.filter(pr => {
                     const st = pr.stockDisponible;
                     return pr.disponible !== false && (st === null || st === undefined || st > 0);
                 });
-
-                if (!pres.length) {
-                    // No hay presentaciones disponibles — agregar directamente
+        
+                if (!disponibles.length) {
+                    // No hay presentaciones disponibles para esta modalidad → agregar al precio base
                     this.close();
                     CartView._addToCartAndSync(platoObj.id, null, null);
+                    Toast.show('i', '🥤', platoObj.nombre, 'Agregado al precio base');
                     return;
                 }
-
-                pres.forEach(pr => {
-                    const st = pr.stockDisponible, low = st != null && st > 0 && st <= 3;
-                    const stLbl = st != null ? (low ? `<span class="soup-stk low">⚠️ ${st}</span>` : `<span class="soup-stk">${st} disp.</span>`) : '';
-                    const opt = document.createElement('div'); opt.className = 'soup-opt'; opt.id = `popt-${pr.id}`;
+        
+                disponibles.forEach(pr => {
+                    const st  = pr.stockDisponible;
+                    const low = st != null && st > 0 && st <= 3;
+                    const stLbl = st != null
+                        ? (low
+                            ? `<span class="soup-stk low">⚠️ ${st}</span>`
+                            : `<span class="soup-stk">${st} disp.</span>`)
+                        : '';
+        
+                    // Badge de modalidad (solo si no es AMBAS, para dar contexto al mesero)
+                    const modalBadge = pr.modalidad && pr.modalidad !== 'AMBAS'
+                        ? `<span style="font-size:.6rem;padding:1px 5px;border-radius:3px;margin-left:4px;
+                                    background:${pr.modalidad==='MESA'?'rgba(34,197,94,.15)':'rgba(59,130,246,.15)'};
+                                    color:${pr.modalidad==='MESA'?'#86EFAC':'#93C5FD'}">
+                            ${pr.modalidad==='MESA'?'🪑 mesa':'📦 llevar'}
+                        </span>`
+                        : '';
+        
+                    const opt = document.createElement('div');
+                    opt.className = 'soup-opt';
+                    opt.id = `popt-${pr.id}`;
                     opt.innerHTML = `
-                <div class="soup-opt-em">${MenuView._emojiFor(platoObj.categoria)}</div>
-                <div class="soup-opt-inf">
-                    <div class="soup-opt-name">${pr.nombre}</div>
-                    <div class="soup-opt-sub"><strong style="color:var(--accent);">Bs. ${pr.precio}</strong> ${stLbl}</div>
-                </div>
-                <div class="soup-opt-chk"></div>`;
+                        <div class="soup-opt-em">${MenuView._emojiFor(platoObj.categoria)}</div>
+                        <div class="soup-opt-inf">
+                            <div class="soup-opt-name">${pr.nombre}${modalBadge}</div>
+                            <div class="soup-opt-sub">
+                                <strong style="color:var(--accent);font-size:.88rem;">Bs. ${pr.precio}</strong>
+                                ${stLbl}
+                            </div>
+                        </div>
+                        <div class="soup-opt-chk"></div>`;
                     opt.onclick = () => this._select(pr);
                     container.appendChild(opt);
                 });
-
-                // Agotadas (sólo visual)
-                (platoObj.presentaciones || []).filter(pr => !pres.find(x => x.id === pr.id)).forEach(pr => {
-                    const opt = document.createElement('div'); opt.className = 'soup-opt'; opt.style.cssText = 'opacity:.35;pointer-events:none;';
-                    opt.innerHTML = `<div class="soup-opt-em">🚫</div><div class="soup-opt-inf"><div class="soup-opt-name">${pr.nombre}</div><div class="soup-opt-sub"><span class="soup-stk out">AGOTADO</span></div></div><div class="soup-opt-chk"></div>`;
-                    container.appendChild(opt);
-                });
-
-                document.getElementById('pres-backdrop').classList.add('open');
-                document.getElementById('pres-drawer').classList.add('open');
+        
+                // Mostrar presentaciones agotadas (solo visual, no clickeables)
+                presentaciones
+                    .filter(pr => !disponibles.find(x => x.id === pr.id))
+                    .forEach(pr => {
+                        const opt = document.createElement('div');
+                        opt.className = 'soup-opt';
+                        opt.style.cssText = 'opacity:.35;pointer-events:none;';
+                        opt.innerHTML = `
+                            <div class="soup-opt-em">🚫</div>
+                            <div class="soup-opt-inf">
+                                <div class="soup-opt-name">${pr.nombre}</div>
+                                <div class="soup-opt-sub"><span class="soup-stk out">AGOTADO</span></div>
+                            </div>
+                            <div class="soup-opt-chk"></div>`;
+                        container.appendChild(opt);
+                    });
             },
-
+        
             _select(pres) {
                 this._selectedPres = pres;
                 document.querySelectorAll('#pres-options .soup-opt').forEach(el => {
@@ -2253,18 +2485,22 @@
                     const c = el.querySelector('.soup-opt-chk'); if (c) c.textContent = '';
                 });
                 const sel = document.getElementById(`popt-${pres.id}`);
-                if (sel) { sel.classList.add('selected'); const c = sel.querySelector('.soup-opt-chk'); if (c) c.textContent = '✓'; }
-                document.getElementById('pres-plato-prc').textContent = `Bs. ${pres.precio}`;
-                document.getElementById('pres-confirm-btn').disabled = false;
+                if (sel) {
+                    sel.classList.add('selected');
+                    const c = sel.querySelector('.soup-opt-chk'); if (c) c.textContent = '✓';
+                }
+                document.getElementById('pres-plato-prc').textContent  = `Bs. ${pres.precio}`;
+                document.getElementById('pres-confirm-btn').disabled   = false;
             },
-
+        
             close() {
                 document.getElementById('pres-backdrop').classList.remove('open');
                 document.getElementById('pres-drawer').classList.remove('open');
             },
-
+        
             confirm() {
-                const pres = this._selectedPres; this.close();
+                const pres = this._selectedPres;
+                this.close();
                 if (pres) CartView._addToCartAndSync(this._platoId, pres, null);
             }
         };
@@ -2533,54 +2769,146 @@
             async load() { try { this._render(await API.getPedidosActivos()); } catch (e) { console.error(e); } },
 
             _render(pedidos) {
-                const list = document.getElementById('activos-list'); if (!list) return;
+                const list = document.getElementById('activos-list');
+                if (!list) return;
                 list.innerHTML = '';
+            
                 if (!pedidos.length) {
-                    list.innerHTML = `<div style="text-align:center;padding:50px 20px;color:var(--text2);"><div style="font-size:3rem;">🍽️</div><h3 style="margin:8px 0 4px;font-weight:900;">Sin pedidos activos</h3><p style="font-size:.85rem;">No hay comandas en curso.</p></div>`;
+                    list.innerHTML = `
+                        <div style="text-align:center;padding:50px 20px;color:var(--text2);">
+                            <div style="font-size:3rem;">🍽️</div>
+                            <h3 style="margin:8px 0 4px;font-weight:900;">Sin pedidos activos</h3>
+                            <p style="font-size:.85rem;">No hay comandas en curso.</p>
+                        </div>`;
                     return;
                 }
-                pedidos.forEach(p => {
-                    const isLl = p.tipo === 'LLEVAR', label = isLl ? `📦 ${p.nombreCliente}` : `🪑 Mesa ${p.numeroMesa}`;
-                    const total = (p.detalles ?? []).reduce((a, d) => a + d.plato.precio * d.cantidad, 0);
-                    const bgBadge = p.estado === 'PENDIENTE' ? '#95a5a6' : p.estado === 'EN_PREPARACION' ? '#f39c12' : '#2ecc71';
-
+            
+                pedidos.filter(p => !p.pagado).forEach(p => {
+                    
+                    const isLl   = p.tipo === 'LLEVAR';
+                    const label  = isLl ? `📦 ${p.nombreCliente}` : `🪑 Mesa ${p.numeroMesa}`;
+            
+                    /* ★ FIX: usa precioUnitario del detalle, no plato.precio
+                    Así los refrescos con presentación muestran el precio real (ej: 10 Bs)
+                    en lugar del precio base del plato padre (que puede ser 0) */
+                    const total = (p.detalles ?? []).reduce(
+                        (a, d) => a + (d.precioUnitario ?? d.plato?.precio ?? 0) * d.cantidad,
+                        0
+                    );
+            
+                    const bgBadge = p.estado === 'PENDIENTE'      ? '#95a5a6'
+                                : p.estado === 'EN_PREPARACION'  ? '#f39c12'
+                                : '#2ecc71';
+            
                     const itemsHtml = (p.detalles ?? []).map(d => {
-                        // ★ Muestra presentación si existe
-                        const presLine = d.presentacion ? ` <span style="font-size:.65rem;background:#DBEAFE;color:#1D4ED8;border-radius:3px;padding:1px 4px;">${d.presentacion.nombre}</span>` : '';
-                        const sopaLine = d.acompananteSopa ? `<span style="font-size:.7rem;background:#FEF3C7;color:#92400E;border-radius:4px;padding:1px 5px;margin-left:4px;">🍲 ${d.acompananteSopa.nombre}</span>` : '';
-                        return `<div style="font-size:.78rem;color:var(--text2);padding:2px 0;">${d.cantidad}× ${d.plato.nombre}${presLine}${sopaLine}</div>`;
+                        /* ★ FIX: muestra nombre de presentación si existe (refresco con tamaño)
+                        y usa precioUnitario para el precio individual */
+                        const presLine = d.presentacion
+                            ? ` <span style="font-size:.65rem;background:#DBEAFE;color:#1D4ED8;
+                                            border-radius:3px;padding:1px 4px;">${d.presentacion.nombre}</span>`
+                            : '';
+                        const sopaLine = d.acompananteSopa
+                            ? `<span style="font-size:.7rem;background:#FEF3C7;color:#92400E;
+                                            border-radius:4px;padding:1px 5px;margin-left:4px;">
+                                🍲 ${d.acompananteSopa.nombre}
+                            </span>`
+                            : '';
+                        /* Precio unitario real (presentacion.precio ya fue guardado en precioUnitario) */
+                        const precio = d.precioUnitario ?? d.plato?.precio ?? 0;
+            
+                        return `<div style="font-size:.78rem;color:var(--text2);padding:2px 0;display:flex;align-items:baseline;gap:4px;">
+                                    <span>${d.cantidad}×</span>
+                                    <span>${d.plato?.nombre ?? 'Plato'}${presLine}${sopaLine}</span>
+                                    <span style="margin-left:auto;font-weight:800;color:var(--accent);">
+                                        Bs. ${(precio * d.cantidad).toFixed(2)}
+                                    </span>
+                                </div>`;
                     }).join('');
-
+            
+                    /* ★ FIX: si ya está pagado, no mostrar la fila de cobro ni el botón Agregar —
+                    solo el sello verde. El registro desaparecerá en la próxima recarga
+                    automática (20s) o cuando el mesero pulse Actualizar. */
                     const pagoHtml = p.pagado
-                        ? `<div style="color:#27ae60;font-weight:800;margin-top:10px;font-size:.88rem;">✅ Pagado con ${p.metodoPago}</div>`
-                        : `<div style="display:flex;gap:8px;margin-top:10px;align-items:center;flex-wrap:wrap;" id="pay-box-${p.id}">
-                    <select id="metodo-${p.id}" style="flex:1;min-width:120px;padding:8px;border-radius:8px;border:1.5px solid var(--border);font-family:'Nunito',sans-serif;font-weight:700;outline:none;font-size:.82rem;">
-                        <option value="EFECTIVO">💰 Efectivo</option>
-                        <option value="QR">📱 QR</option>
-                        <option value="TARJETA">💳 Tarjeta</option>
-                    </select>
-                    <button onclick="ActivosView.cobrar(${p.id})" style="background:#e74c3c;color:white;border:none;padding:8px 14px;border-radius:8px;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;font-size:.82rem;">Cobrar</button>
-                    <button onclick="AgregarSvc.iniciar(${p.id},'${p.estado}',${p.numeroMesa ?? 'null'})"
-                        style="background:#10B981;color:white;border:none;padding:8px 14px;border-radius:8px;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;font-size:.82rem;">
-                        ➕ Agregar
-                    </button>
-                </div>`;
-
-                    list.innerHTML += `<div style="background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:12px;box-shadow:var(--shadow);position:relative;">
-                <span id="badge-${p.id}" style="position:absolute;top:10px;right:12px;background:${bgBadge};color:white;padding:3px 10px;border-radius:10px;font-size:.7rem;font-weight:900;">${p.estado}</span>
-                <div style="font-weight:900;font-size:1rem;margin-bottom:2px;padding-right:80px;color:var(--text);">${label}</div>
-                <div style="margin-bottom:6px;">${itemsHtml}</div>
-                <div style="font-weight:800;font-size:.9rem;">Total: <span style="color:var(--accent);">Bs. ${total.toFixed(2)}</span></div>
-                ${pagoHtml}
-            </div>`;
+                        ? `<div style="color:#27ae60;font-weight:800;margin-top:8px;font-size:.85rem;">
+                            ✅ Pagado con ${p.metodoPago}
+                        </div>`
+                        : `<div style="display:flex;gap:8px;margin-top:10px;align-items:center;flex-wrap:wrap;"
+                                id="pay-box-${p.id}">
+                            <select id="metodo-${p.id}"
+                                style="flex:1;min-width:110px;padding:8px;border-radius:8px;
+                                        border:1.5px solid var(--border);font-family:'Nunito',sans-serif;
+                                        font-weight:700;outline:none;font-size:.82rem;">
+                                <option value="EFECTIVO">💰 Efectivo</option>
+                                <option value="QR">📱 QR</option>
+                                <option value="TARJETA">💳 Tarjeta</option>
+                            </select>
+                            <button onclick="ActivosView.cobrar(${p.id})"
+                                style="background:#e74c3c;color:white;border:none;padding:8px 14px;
+                                        border-radius:8px;font-weight:800;cursor:pointer;
+                                        font-family:'Nunito',sans-serif;font-size:.82rem;">
+                                Cobrar
+                            </button>
+                            <button onclick="AgregarSvc.iniciar(${p.id},'${p.estado}',${p.numeroMesa ?? 'null'})"
+                                style="background:#10B981;color:white;border:none;padding:8px 14px;
+                                        border-radius:8px;font-weight:800;cursor:pointer;
+                                        font-family:'Nunito',sans-serif;font-size:.82rem;">
+                                ➕ Agregar
+                            </button>
+                        </div>`;
+            
+                    list.innerHTML += `
+                        <div id="activo-card-${p.id}"
+                            style="background:var(--bg2);border:1px solid var(--border);border-radius:14px;
+                                    padding:14px;margin-bottom:12px;box-shadow:var(--shadow);position:relative;
+                                    transition:opacity .35s, transform .35s;">
+                            <span id="badge-${p.id}"
+                                style="position:absolute;top:10px;right:12px;background:${bgBadge};
+                                        color:white;padding:3px 10px;border-radius:10px;
+                                        font-size:.7rem;font-weight:900;">${p.estado}</span>
+                            <div style="font-weight:900;font-size:1rem;margin-bottom:4px;
+                                        padding-right:80px;color:var(--text);">${label}</div>
+                            <div style="margin-bottom:4px;">${itemsHtml}</div>
+                            <div style="font-weight:800;font-size:.9rem;border-top:1px solid var(--border);
+                                        padding-top:6px;margin-top:4px;">
+                                Total: <span style="color:var(--accent);">Bs. ${total.toFixed(2)}</span>
+                            </div>
+                            ${pagoHtml}
+                        </div>`;
                 });
             },
 
             async cobrar(id) {
-                const metodo = document.getElementById(`metodo-${id}`).value;
-                try { await API.cobrarPedido(id, metodo); Toast.show('s', '💰', 'Cobro registrado', 'Pago procesado'); await this.load(); }
-                catch (e) { Toast.show('w', '❌', 'Error al cobrar', 'Verifica la conexión'); }
-            }
+                const metodo = document.getElementById(`metodo-${id}`)?.value;
+                if (!metodo) return;
+            
+                /* Deshabilitar botones para evitar doble click */
+                const payBox = document.getElementById(`pay-box-${id}`);
+                if (payBox) payBox.querySelectorAll('button').forEach(b => b.disabled = true);
+            
+                try {
+                    await API.cobrarPedido(id, metodo);
+            
+                    /* SIN Toast — cobro silencioso, la desaparición es el feedback visual */
+            
+                    /* Desvanecer y eliminar la tarjeta del DOM */
+                    const card = document.getElementById(`activo-card-${id}`);
+                    if (card) {
+                        card.style.transition = 'opacity .3s, transform .3s, max-height .35s, margin .35s, padding .35s';
+                        card.style.opacity    = '0';
+                        card.style.transform  = 'scale(.96)';
+                        setTimeout(() => {
+                            card.style.maxHeight  = '0';
+                            card.style.margin     = '0';
+                            card.style.padding    = '0';
+                            card.style.overflow   = 'hidden';
+                            setTimeout(() => card.remove(), 360);
+                        }, 300);
+                    }
+                } catch (err) {
+                    Toast.show('w', '❌', 'Error al cobrar', 'Verifica la conexión');
+                    if (payBox) payBox.querySelectorAll('button').forEach(b => b.disabled = false);
+                }
+            },
         };
 
         /* ─── ReportesView ─── (sin cambios) */
@@ -2737,6 +3065,103 @@
             Clock.start();
             await MenuLoader.load();
             WSManager.connect();
+        })();
+
+        /* ─── AdminAccess — modal de acceso al panel del dueño ───────────────
+        Llama a POST /api/admin/verificar-pin con el PIN ingresado.
+        Si el servidor responde OK → redirige a /menu (sesión marcada).
+        Si el servidor responde 401 → animación de error, limpiar.
+        Activación extra: si la URL tiene ?admin=1 (redirigido por el interceptor)
+        se abre automáticamente al cargar.
+        ─────────────────────────────────────────────────────────────────────── */
+        const AdminAccess = {
+            _value: '',
+        
+            open() {
+                this._value = '';
+                this._render();
+        
+                const overlay = document.getElementById('admin-overlay');
+                const box     = document.getElementById('admin-box');
+        
+                // Manipular estilos directamente — evita el problema de especificidad
+                overlay.style.opacity       = '1';
+                overlay.style.pointerEvents = 'all';
+                box.style.transform         = 'translateY(0) scale(1)';
+        
+                // Limpiar ?admin=1 de la URL si vino del interceptor
+                const url = new URL(window.location.href);
+                if (url.searchParams.has('admin')) {
+                    url.searchParams.delete('admin');
+                    window.history.replaceState({}, '', url.toString());
+                }
+            },
+        
+            close() {
+                const overlay = document.getElementById('admin-overlay');
+                const box     = document.getElementById('admin-box');
+        
+                overlay.style.opacity       = '0';
+                overlay.style.pointerEvents = 'none';
+                box.style.transform         = 'translateY(16px) scale(.96)';
+        
+                this._value = '';
+                this._render();
+            },
+        
+            press(digit) {
+                if (this._value.length >= 4) return;
+                this._value += digit;
+                this._render();
+                if (this._value.length === 4) setTimeout(() => this._verify(), 180);
+            },
+        
+            del() {
+                this._value = this._value.slice(0, -1);
+                this._render();
+            },
+        
+            _render() {
+                for (let i = 0; i < 4; i++) {
+                    const dot = document.getElementById(`adot-${i}`);
+                    if (!dot) continue;
+                    dot.classList.toggle('filled', i < this._value.length);
+                    dot.classList.remove('error', 'success');
+                }
+            },
+        
+            async _verify() {
+                try {
+                    const res  = await fetch('/api/admin/verificar-pin', {
+                        method:  'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body:    JSON.stringify({ pin: this._value })
+                    });
+                    const data = await res.json();
+        
+                    if (data.ok) {
+                        for (let i = 0; i < 4; i++)
+                            document.getElementById(`adot-${i}`)?.classList.add('success');
+                        setTimeout(() => { window.location.href = '/menu'; }, 450);
+                    } else {
+                        for (let i = 0; i < 4; i++)
+                            document.getElementById(`adot-${i}`)?.classList.add('error');
+                        setTimeout(() => { this._value = ''; this._render(); }, 800);
+                    }
+                } catch (err) {
+                    console.error('[AdminAccess] Error de red:', err);
+                    Toast.show('w', '⚠️', 'Sin conexión', 'No se pudo verificar el PIN');
+                    this._value = ''; this._render();
+                }
+            }
+        };
+        
+        /* ─── Detección automática del parámetro ?admin=1 ─── */
+        (function checkAdminRedirect() {
+            const params = new URLSearchParams(window.location.search);
+            if (params.get('admin') === '1') {
+                setTimeout(() => AdminAccess.open(), 300);
+            }
         })();
     </script>
 </body>

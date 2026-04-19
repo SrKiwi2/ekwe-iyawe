@@ -11,19 +11,11 @@ import lombok.RequiredArgsConstructor;
 public class PageController {
 
     @GetMapping("/")
-    public String home() {
-        return "redirect:/mesero";
-    }
-
+    public String home() { return "redirect:/mesero"; }
+ 
     @GetMapping("/mesero")
-    public String mesero(Model model) {
-        
-        return "mesero";
-    }
-
+    public String mesero() { return "mesero"; }
+ 
     @GetMapping("/cocina")
-    public String cocina(Model model) {
-        
-        return "cocina";
-    }
+    public String cocina() { return "cocina"; }
 }

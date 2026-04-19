@@ -27,10 +27,12 @@ import com.sistema.pedidosCori.models.dao.IPresentacionPlatoDao;
 import com.sistema.pedidosCori.models.dto.MenuDiarioItemDTO;
 import com.sistema.pedidosCori.models.dto.NotificacionWsDTO;
 import com.sistema.pedidosCori.models.dto.PedidoRequestDTO;
+import com.sistema.pedidosCori.models.dto.PresentacionRequestDTO;
 import com.sistema.pedidosCori.models.dto.ReporteDiarioDTO;
 import com.sistema.pedidosCori.models.dto.StockUpdateDTO;
 import com.sistema.pedidosCori.models.entity.DetallePedido;
 import com.sistema.pedidosCori.models.entity.EstadoPedido;
+import com.sistema.pedidosCori.models.entity.Modalidad;
 import com.sistema.pedidosCori.models.entity.Pedido;
 import com.sistema.pedidosCori.models.entity.Plato;
 import com.sistema.pedidosCori.models.entity.PresentacionPlato;
@@ -81,31 +83,53 @@ public class ApiController {
  
     // ── Presentaciones (tamaños/precios por plato) ───────────────────────────
  
-    @GetMapping("/platos/{id}/presentaciones")
-    public ResponseEntity<List<PresentacionPlato>> getPresentaciones(@PathVariable Long id) {
+        @GetMapping("/platos/{id}/presentaciones")
+    public ResponseEntity<List<PresentacionPlato>> getPresentaciones(
+            @PathVariable Long id,
+            @RequestParam(required = false) String tipo) {
+ 
+        if (tipo != null) {
+            Modalidad mod;
+            try { mod = Modalidad.valueOf(tipo.toUpperCase()); }
+            catch (IllegalArgumentException e) { return ResponseEntity.badRequest().build(); }
+ 
+            List<Modalidad> filtro = List.of(mod, Modalidad.AMBAS);
+            return ResponseEntity.ok(
+                presentacionPlatoDao.findByPlatoIdAndDisponibleTrueAndModalidadIn(id, filtro)
+            );
+        }
+ 
         return ResponseEntity.ok(presentacionPlatoDao.findByPlatoIdOrderByPrecioAsc(id));
     }
  
     @PostMapping("/platos/{id}/presentaciones")
     public ResponseEntity<PresentacionPlato> crearPresentacion(
-            @PathVariable Long id, @RequestBody PresentacionPlato dto) {
+            @PathVariable Long id, @RequestBody PresentacionRequestDTO dto) {
         return platoDao.findById(id).map(plato -> {
-            dto.setPlato(plato);
-            if (dto.getDisponible() == null) dto.setDisponible(true);
-            PresentacionPlato saved = presentacionPlatoDao.save(dto);
+            PresentacionPlato pres = PresentacionPlato.builder()
+                .plato(plato)
+                .nombre(dto.getNombre())
+                .precio(dto.getPrecio())
+                .stockDisponible(dto.getStockDisponible())
+                .disponible(dto.getDisponible() != null ? dto.getDisponible() : true)
+                .modalidad(dto.getModalidad() != null ? dto.getModalidad() : Modalidad.AMBAS)
+                .build();
+            PresentacionPlato saved = presentacionPlatoDao.save(pres);
             messagingTemplate.convertAndSend("/topic/menu",
-                NotificacionWsDTO.builder().tipo("ACTUALIZACION_MENU").mensaje("Presentacion anadida").build());
+                NotificacionWsDTO.builder().tipo("ACTUALIZACION_MENU").build());
             return ResponseEntity.ok(saved);
         }).orElse(ResponseEntity.notFound().build());
     }
  
     @PutMapping("/presentaciones/{id}")
     public ResponseEntity<PresentacionPlato> editarPresentacion(
-            @PathVariable Long id, @RequestBody PresentacionPlato dto) {
+            @PathVariable Long id, @RequestBody PresentacionRequestDTO dto) {
         return presentacionPlatoDao.findById(id).map(p -> {
-            p.setNombre(dto.getNombre()); p.setPrecio(dto.getPrecio());
+            if (dto.getNombre()       != null) p.setNombre(dto.getNombre());
+            if (dto.getPrecio()       != null) p.setPrecio(dto.getPrecio());
             if (dto.getStockDisponible() != null) p.setStockDisponible(dto.getStockDisponible());
-            if (dto.getDisponible() != null) p.setDisponible(dto.getDisponible());
+            if (dto.getDisponible()   != null) p.setDisponible(dto.getDisponible());
+            if (dto.getModalidad()    != null) p.setModalidad(dto.getModalidad());
             return ResponseEntity.ok(presentacionPlatoDao.save(p));
         }).orElse(ResponseEntity.notFound().build());
     }

@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -48,4 +50,16 @@ public class PresentacionPlato {
 
     @Column(name = "stock_disponible")
     private Integer stockDisponible;
+
+
+    /**
+     * ★ NUEVO: controla en qué modalidad aparece esta presentación.
+     * MESA   → solo aparece cuando el mesero seleccionó "En Mesa"
+     * LLEVAR → solo aparece cuando seleccionó "Para Llevar"
+     * AMBAS  → siempre visible (default para presentaciones genéricas)
+     */
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    @Builder.Default
+    private Modalidad modalidad = Modalidad.AMBAS;
 }

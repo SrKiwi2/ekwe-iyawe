@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <title>Ekwe Iyawe — Configurar Menú</title>
-    <link rel="icon" href="/img/logo.png" th:href="@{/img/logo.png?v=1}" type="image/png">
+    <title>Ekwe Iyawe — Panel Admin</title>
+    <link rel="icon" th:href="@{/img/logo.png?v=1}" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -13,10 +13,14 @@
         :root {
             --maroon: #7C2100;
             --maroon-d: #5A1800;
+            --maroon-m: rgba(92, 24, 0, 0.94);
             --mustard: #ECA322;
             --gold: #F6B846;
             --cream: #FEF3C7;
             --green: #22C55E;
+            --blue: #3B82F6;
+            --red: #EF4444;
+            --border: rgba(255, 255, 255, 0.12);
         }
 
         * {
@@ -35,100 +39,120 @@
             padding-bottom: 110px;
         }
 
+        /* ── Top Bar ── */
         .top-bar {
             position: sticky;
             top: 0;
-            z-index: 10;
+            z-index: 50;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 14px 18px;
-            background: rgba(92, 24, 0, 0.92);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 12px 16px;
+            background: var(--maroon-m);
+            border-bottom: 1px solid var(--border);
             backdrop-filter: blur(12px);
-            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, .3);
         }
 
         .top-bar h1 {
-            font-size: 1.05rem;
+            font-size: .95rem;
             font-weight: 900;
             color: var(--gold);
         }
 
         #date-display {
-            font-weight: 800;
-            font-size: .78rem;
+            font-size: .72rem;
+            font-weight: 700;
             color: var(--cream);
-            opacity: .85;
+            opacity: .7;
         }
 
+        /* Botón de logout */
+        .btn-logout {
+            background: rgba(239, 68, 68, .15);
+            border: 1px solid rgba(239, 68, 68, .3);
+            color: #FCA5A5;
+            border-radius: 8px;
+            padding: 6px 12px;
+            font-size: .75rem;
+            font-weight: 800;
+            font-family: 'Nunito', sans-serif;
+            cursor: pointer;
+            transition: all .15s;
+        }
+
+        .btn-logout:active {
+            background: rgba(239, 68, 68, .3);
+        }
+
+        /* ── Container ── */
         .container {
-            padding: 16px;
-            max-width: 800px;
+            padding: 12px 14px;
+            max-width: 680px;
             margin: 0 auto;
         }
 
+        /* ── Banner ── */
         .day-banner {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1.5px solid rgba(255, 255, 255, 0.2);
-            border-radius: 16px;
-            padding: 18px 20px;
+            background: rgba(255, 255, 255, .08);
+            border: 1.5px solid rgba(255, 255, 255, .18);
+            border-radius: 14px;
+            padding: 14px 16px;
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
         }
 
         .day-banner-title {
             font-family: 'Great Vibes', cursive;
-            font-size: 2.4rem;
+            font-size: 2rem;
             color: var(--gold);
-            line-height: 1;
-            margin-bottom: 4px;
+            line-height: 1.1;
         }
 
         .day-banner h2 {
+            font-size: .85rem;
             font-weight: 900;
-            font-size: 1rem;
             text-transform: uppercase;
             letter-spacing: 1.5px;
             color: var(--cream);
+            margin-top: 3px;
         }
 
         .day-banner p {
-            font-size: .78rem;
-            color: rgba(255, 255, 255, 0.65);
-            font-weight: 600;
-            margin-top: 4px;
+            font-size: .72rem;
+            color: rgba(255, 255, 255, .55);
+            margin-top: 3px;
         }
 
+        /* ── Sección de categoría ── */
         .cat-section {
-            margin-bottom: 18px;
-            background: rgba(255, 255, 255, 0.08);
-            border: 1.5px solid rgba(255, 255, 255, 0.15);
-            border-radius: 16px;
-            padding: 16px;
+            margin-bottom: 14px;
+            background: rgba(255, 255, 255, .06);
+            border: 1.5px solid rgba(255, 255, 255, .12);
+            border-radius: 14px;
+            overflow: hidden;
         }
 
         .cat-section.extras {
-            background: rgba(236, 163, 34, 0.15);
-            border-color: rgba(246, 184, 70, 0.3);
+            background: rgba(236, 163, 34, .1);
+            border-color: rgba(246, 184, 70, .25);
         }
 
         .cat-section.postres {
-            background: rgba(255, 182, 193, 0.1);
-            border-color: rgba(255, 182, 193, 0.3);
+            background: rgba(255, 182, 193, .08);
+            border-color: rgba(255, 182, 193, .25);
         }
 
         .cat-head {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            margin-bottom: 14px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
-            padding-bottom: 10px;
+            justify-content: space-between;
+            padding: 10px 14px;
+            border-bottom: 1px solid var(--border);
         }
 
         .cat-title {
-            font-size: 1rem;
+            font-size: .82rem;
             font-weight: 900;
             color: var(--gold);
             text-transform: uppercase;
@@ -143,158 +167,190 @@
             color: #FFB6C1;
         }
 
-        .btn-add {
-            background: rgba(246, 184, 70, 0.2);
-            color: var(--gold);
-            border: 1.5px solid rgba(246, 184, 70, 0.4);
-            padding: 6px 13px;
-            border-radius: 8px;
+        .btn-add-plato {
+            background: rgba(59, 130, 246, .2);
+            color: #93C5FD;
+            border: 1px solid rgba(59, 130, 246, .35);
+            padding: 5px 12px;
+            border-radius: 7px;
+            font-size: .72rem;
             font-weight: 800;
-            font-size: .8rem;
             cursor: pointer;
+            transition: all .15s;
         }
 
-        .btn-add:active {
-            transform: scale(.95);
+        .btn-add-plato:active {
+            background: rgba(59, 130, 246, .35);
         }
 
-        .platos-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-            gap: 10px;
-        }
-
-        .plato-card {
-            background: rgba(255, 255, 255, 0.07);
-            border: 2px solid rgba(255, 255, 255, 0.15);
-            border-radius: 12px;
-            padding: 12px;
-            cursor: pointer;
-            transition: all .2s;
+        /* ── Lista de platos ── */
+        .platos-list {
             display: flex;
             flex-direction: column;
-            align-items: center;
-            text-align: center;
-            gap: 4px;
-            position: relative;
-            min-height: 100px;
         }
 
-        .plato-card .p-name {
+        /* ── Fila de plato (diseño lista compacta) ── */
+        .plato-row {
+            display: flex;
+            flex-direction: column;          /* ← dos filas apiladas */
+            gap: 8px;
+            padding: 11px 14px;
+            border-bottom: 1px solid rgba(255,255,255,.07);
+            transition: background .15s;
+        }
+
+        .plato-row:last-child {
+            border-bottom: none;
+        }
+
+        .plato-row:active {
+            background: rgba(255, 255, 255, .04);
+        }
+
+        .plato-row-top {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+        }
+
+        .plato-row-bottom {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: nowrap;
+        }
+
+        /* Toggle activo/inactivo (checkbox táctil) */
+        .toggle-wrap {
+            flex-shrink: 0;
+        }
+
+        .toggle-track {
+            position: relative; width: 42px; height: 24px;
+            background: rgba(255,255,255,.15); border-radius: 12px;
+            transition: background .2s; cursor: pointer;
+            border: 1.5px solid rgba(255,255,255,.15);
+        }
+
+        .toggle-track.on {
+            background: rgba(34, 197, 94, .7);
+            border-color: rgba(34, 197, 94, .5);
+        }
+
+        .toggle-thumb {
+            position: absolute; top: 2px; left: 2px;
+            width: 16px; height: 16px; border-radius: 50%;
+            background: #fff; transition: transform .2s;
+        }
+
+        .toggle-track.on .toggle-thumb {
+            transform: translateX(18px);
+        }
+
+        /* Información del plato */
+        .plato-info {
+            flex: 1;
+        }
+
+        .plato-nombre {
+            font-size: .92rem;
             font-weight: 800;
-            font-size: .85rem;
-            line-height: 1.2;
             color: #fff;
+            line-height: 1.25;
+            word-break: break-word;
+            flex: 1;
         }
 
-        .plato-card .p-price {
-            font-weight: 900;
-            color: rgba(255, 255, 255, 0.55);
-            font-size: .8rem;
-        }
-
-        .plato-card.active {
-            background: rgba(236, 163, 34, 0.25);
-            border-color: var(--mustard);
-            box-shadow: 0 4px 16px rgba(236, 163, 34, 0.25);
-        }
-
-        .plato-card.active .p-price {
-            color: var(--gold);
-        }
-
-        .plato-card::after {
-            content: '✕';
-            position: absolute;
-            top: -7px;
-            right: -7px;
-            background: rgba(255, 255, 255, 0.2);
-            color: rgba(255, 255, 255, 0.7);
-            width: 22px;
-            height: 22px;
-            border-radius: 50%;
-            font-size: .7rem;
-            font-weight: 900;
+        .plato-meta {
             display: flex;
             align-items: center;
-            justify-content: center;
+            gap: 6px;
+            margin-top: 2px;
+            flex-wrap: wrap;
         }
 
-        .plato-card.active::after {
-            content: '✓';
-            background: var(--mustard);
-            color: var(--maroon);
+        .plato-precio { font-size: .8rem; font-weight: 900; color: var(--gold); }
+
+        .plato-stock {
+            font-size: .68rem; font-weight: 800; padding: 1px 6px;
+            border-radius: 5px; background: rgba(255,255,255,.1); color: rgba(255,255,255,.55);
         }
 
-        .btn-edit {
-            position: absolute;
-            top: 4px;
-            left: 4px;
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 6px;
-            width: 24px;
-            height: 24px;
-            font-size: .7rem;
-            cursor: pointer;
-            z-index: 2;
+        .plato-stock.sin-control {
+            background: rgba(59, 130, 246, .15);
+            color: #93C5FD;
+        }
+
+        .pres-badge {
+            font-size: .63rem; font-weight: 800; padding: 1px 6px; border-radius: 5px;
+            background: rgba(246,184,70,.15); color: var(--gold);
+            border: 1px solid rgba(246,184,70,.25);
+        }
+
+        /* Qty inline */
+        .qty-inline {
             display: flex;
             align-items: center;
-            justify-content: center;
-            color: white;
-        }
-
-        .qty-control {
-            display: none;
-            align-items: center;
-            gap: 4px;
-            margin-top: 6px;
-            background: rgba(0, 0, 0, 0.25);
+            gap: 3px;
+            background: rgba(0, 0, 0, .25);
             border-radius: 8px;
-            padding: 4px 6px;
+            padding: 3px 5px;
+            flex-shrink: 0;
         }
 
-        .plato-card.active .qty-control {
-            display: flex;
+        .qty-btn-sm {
+            background: rgba(246,184,70,.25); border: none; color: var(--gold);
+            width: 30px; height: 30px; border-radius: 6px;    /* ← más grande */
+            font-size: 1rem; font-weight: 900; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            font-family: 'Nunito', sans-serif; flex-shrink: 0;
         }
 
-        .qty-btn {
-            background: rgba(246, 184, 70, 0.3);
-            border: none;
+        .qty-btn-sm:active {
+            background: rgba(246, 184, 70, .5);
+        }
+
+        .qty-num-sm {
+            font-size: .85rem; font-weight: 900; color: #fff;
+            width: 40px; text-align: center;
+            background: rgba(0,0,0,.2); border: 1px solid rgba(255,255,255,.1);
+            border-radius: 5px; padding: 3px 0; outline: none;
+            font-family: 'Nunito', sans-serif;
+        }
+
+        /* Botones de acción */
+        .plato-actions { display: flex; gap: 6px; flex-shrink: 0; margin-left: auto; }
+
+        .act-btn {
+            width: 38px; height: 38px; border-radius: 9px;   /* ← más grande */
+            border: 1px solid; display: flex; align-items: center;
+            justify-content: center; font-size: .9rem; cursor: pointer;
+            transition: all .15s; background: none;
+        }
+
+        .act-btn:active {
+            transform: scale(.88);
+        }
+
+        .act-btn.edit {
+            border-color: rgba(59, 130, 246, .3);
+            color: #93C5FD;
+            background: rgba(59, 130, 246, .1);
+        }
+
+        .act-btn.pres {
+            border-color: rgba(246, 184, 70, .3);
             color: var(--gold);
-            width: 22px;
-            height: 22px;
-            border-radius: 5px;
-            font-size: .9rem;
-            font-weight: 900;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: 'Nunito', sans-serif;
+            background: rgba(246, 184, 70, .1);
         }
 
-        .qty-input {
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(246, 184, 70, 0.4);
-            border-radius: 5px;
-            color: #fff;
-            font-weight: 900;
-            font-size: .82rem;
-            width: 38px;
-            text-align: center;
-            font-family: 'Nunito', sans-serif;
-            padding: 2px 0;
-            outline: none;
+        .act-btn.del {
+            border-color: rgba(239, 68, 68, .3);
+            color: #FCA5A5;
+            background: rgba(239, 68, 68, .1);
         }
 
-        .qty-label {
-            font-size: .6rem;
-            color: rgba(255, 255, 255, 0.5);
-            font-weight: 700;
-            letter-spacing: .5px;
-        }
-
+        /* ── Bottom bar ── */
         .actions-bar {
             position: fixed;
             bottom: 0;
@@ -302,22 +358,22 @@
             right: 0;
             display: flex;
             gap: 10px;
-            padding: 13px 16px;
-            background: rgba(92, 24, 0, 0.95);
-            border-top: 1px solid rgba(255, 255, 255, 0.12);
+            padding: 12px 14px;
+            background: var(--maroon-m);
+            border-top: 1px solid var(--border);
             backdrop-filter: blur(12px);
             z-index: 100;
         }
 
         .btn-main {
             flex: 1;
-            padding: 14px;
+            padding: 13px;
             background: var(--green);
-            color: white;
+            color: #fff;
             font-weight: 900;
             border: none;
             border-radius: 12px;
-            font-size: .92rem;
+            font-size: .88rem;
             cursor: pointer;
             transition: transform .15s;
         }
@@ -327,7 +383,7 @@
         }
 
         .btn-main.blue {
-            background: #3B82F6;
+            background: var(--blue);
         }
 
         .btn-main:disabled {
@@ -336,10 +392,11 @@
             transform: none;
         }
 
+        /* ── MODAL BASE ── */
         .modal-overlay {
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.7);
+            background: rgba(0, 0, 0, .75);
             z-index: 200;
             display: flex;
             justify-content: center;
@@ -357,12 +414,14 @@
         .modal-sheet {
             background: #1e0f08;
             width: 100%;
-            max-width: 500px;
+            max-width: 520px;
             border-radius: 24px 24px 0 0;
-            padding: 24px;
-            border: 1px solid rgba(246, 184, 70, 0.2);
+            padding: 22px;
+            border: 1px solid rgba(246, 184, 70, .2);
             transform: translateY(100%);
             transition: transform .3s cubic-bezier(.34, 1.3, .64, 1);
+            max-height: 90vh;
+            overflow-y: auto;
         }
 
         .modal-overlay.open .modal-sheet {
@@ -372,33 +431,33 @@
         .modal-sheet h2 {
             color: var(--gold);
             font-weight: 900;
-            margin-bottom: 16px;
-            font-size: 1.1rem;
+            margin-bottom: 14px;
+            font-size: 1rem;
         }
 
         .inp-group {
-            margin-bottom: 14px;
+            margin-bottom: 12px;
             display: flex;
             flex-direction: column;
-            gap: 6px;
+            gap: 5px;
         }
 
         .inp-group label {
-            font-size: .78rem;
+            font-size: .72rem;
             font-weight: 800;
-            color: rgba(255, 255, 255, 0.55);
+            color: rgba(255, 255, 255, .5);
             text-transform: uppercase;
             letter-spacing: .5px;
         }
 
         .inp-group input,
         .inp-group select {
-            padding: 12px;
-            border: 1.5px solid rgba(255, 255, 255, 0.15);
-            border-radius: 10px;
+            padding: 11px 12px;
+            border: 1.5px solid rgba(255, 255, 255, .15);
+            border-radius: 9px;
             font-weight: 700;
-            font-size: .95rem;
-            background: rgba(255, 255, 255, 0.08);
+            font-size: .9rem;
+            background: rgba(255, 255, 255, .07);
             color: #fff;
             outline: none;
             font-family: 'Nunito', sans-serif;
@@ -423,26 +482,224 @@
         .btn-modal-row {
             display: flex;
             gap: 10px;
-            margin-top: 20px;
+            margin-top: 16px;
         }
 
         .btn-modal {
             flex: 1;
-            padding: 13px;
+            padding: 12px;
             background: var(--mustard);
             color: var(--maroon);
             font-weight: 900;
             border: none;
-            border-radius: 12px;
-            font-size: .95rem;
+            border-radius: 11px;
+            font-size: .9rem;
             cursor: pointer;
         }
 
         .btn-modal.cancel {
-            background: rgba(255, 255, 255, 0.1);
-            color: rgba(255, 255, 255, 0.7);
+            background: rgba(255, 255, 255, .1);
+            color: rgba(255, 255, 255, .65);
         }
 
+        .btn-modal.danger {
+            background: rgba(239, 68, 68, .8);
+            color: #fff;
+        }
+
+        /* ── SECCIÓN DE PRESENTACIONES en el modal ── */
+        .pres-section {
+            margin-top: 16px;
+            border-top: 1px solid rgba(255, 255, 255, .1);
+            padding-top: 14px;
+        }
+
+        .pres-section-title {
+            font-size: .72rem;
+            font-weight: 800;
+            color: rgba(255, 255, 255, .4);
+            text-transform: uppercase;
+            letter-spacing: .5px;
+            margin-bottom: 10px;
+        }
+
+        .pres-list-inline {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 10px;
+        }
+
+        /* Fila de presentación: modo lectura */
+        .pres-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, .06);
+            border: 1px solid rgba(255, 255, 255, .09);
+            border-radius: 10px;
+            padding: 8px 10px;
+        }
+
+        .pres-item.editing {
+            background: rgba(246, 184, 70, .08);
+            border-color: rgba(246, 184, 70, .25);
+        }
+
+        .pres-item-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .pres-item-nombre {
+            font-size: .84rem;
+            font-weight: 800;
+            color: #fff;
+        }
+
+        .pres-item-precio {
+            font-size: .78rem;
+            font-weight: 900;
+            color: var(--gold);
+        }
+
+        .pres-item-meta {
+            display: flex;
+            gap: 5px;
+            margin-top: 2px;
+            flex-wrap: wrap;
+        }
+
+        .pres-item-badge {
+            font-size: .6rem;
+            font-weight: 800;
+            padding: 1px 6px;
+            border-radius: 4px;
+        }
+
+        .badge-mesa {
+            background: rgba(34, 197, 94, .15);
+            color: #86EFAC;
+        }
+
+        .badge-llevar {
+            background: rgba(59, 130, 246, .15);
+            color: #93C5FD;
+        }
+
+        .badge-ambas {
+            background: rgba(255, 255, 255, .1);
+            color: rgba(255, 255, 255, .5);
+        }
+
+        .badge-inact {
+            background: rgba(239, 68, 68, .15);
+            color: #FCA5A5;
+        }
+
+        /* Botones de fila de presentación */
+        .pres-item-btns {
+            display: flex;
+            gap: 4px;
+            flex-shrink: 0;
+        }
+
+        .pres-act {
+            width: 28px;
+            height: 28px;
+            border-radius: 7px;
+            border: 1px solid;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: .75rem;
+            cursor: pointer;
+            background: none;
+            transition: all .12s;
+        }
+
+        .pres-act:active {
+            transform: scale(.88);
+        }
+
+        .pres-act.edit-p {
+            border-color: rgba(59, 130, 246, .3);
+            color: #93C5FD;
+        }
+
+        .pres-act.del-p {
+            border-color: rgba(239, 68, 68, .3);
+            color: #FCA5A5;
+        }
+
+        /* Formulario inline de edición / creación de presentación */
+        .pres-form {
+            background: rgba(0, 0, 0, .2);
+            border: 1px solid rgba(246, 184, 70, .2);
+            border-radius: 10px;
+            padding: 10px;
+            display: none;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .pres-form.open {
+            display: flex;
+        }
+
+        .pres-form .inp-row {
+            gap: 8px;
+        }
+
+        .pres-form input,
+        .pres-form select {
+            padding: 8px 10px;
+            border: 1px solid rgba(255, 255, 255, .12);
+            border-radius: 7px;
+            background: rgba(255, 255, 255, .07);
+            color: #fff;
+            font-size: .82rem;
+            font-weight: 700;
+            font-family: 'Nunito', sans-serif;
+            outline: none;
+        }
+
+        .pres-form input:focus,
+        .pres-form select:focus {
+            border-color: var(--gold);
+        }
+
+        .pres-form-btns {
+            display: flex;
+            gap: 6px;
+        }
+
+        .pres-form-save {
+            flex: 1;
+            background: rgba(246, 184, 70, .7);
+            color: var(--maroon);
+            border: none;
+            border-radius: 7px;
+            padding: 8px;
+            font-size: .82rem;
+            font-weight: 800;
+            cursor: pointer;
+            font-family: 'Nunito', sans-serif;
+        }
+
+        .pres-form-cancel {
+            background: rgba(255, 255, 255, .1);
+            color: rgba(255, 255, 255, .6);
+            border: none;
+            border-radius: 7px;
+            padding: 8px 12px;
+            font-size: .82rem;
+            font-weight: 800;
+            cursor: pointer;
+            font-family: 'Nunito', sans-serif;
+        }
+
+        /* ── Canvas exportable ── */
         #export-wrap {
             position: absolute;
             left: -9999px;
@@ -618,7 +875,6 @@
             text-align: center;
             color: #000;
             padding-bottom: 40px;
-            position: relative;
         }
 
         .mc-contact-lbl {
@@ -651,27 +907,34 @@
         }
 
         ::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, .2);
             border-radius: 2px;
         }
     </style>
 </head>
 
 <body>
+
     <div class="top-bar">
-        <h1>⚙️ Configurar Menú del Día</h1><span id="date-display"></span>
+        <h1>⚙️ Menú del Día</h1>
+        <span id="date-display"></span>
+        <button class="btn-logout" onclick="AdminSvc.logout()">Salir ↩</button>
     </div>
+
     <div class="container" id="menu-container">
         <div class="day-banner">
             <div class="day-banner-title">Pensión Ekwe Iyawe</div>
             <h2>Almuerzo del Día</h2>
-            <p>Selecciona platos y ajusta la cantidad de porciones disponibles</p>
+            <p>Activa platos, ajusta porciones y configura tamaños de bebidas</p>
         </div>
     </div>
+
     <div class="actions-bar">
         <button class="btn-main" onclick="guardarMenuDelDia()" id="btn-save">💾 Publicar Menú</button>
         <button class="btn-main blue" onclick="generarImagenMenu()">📸 Imagen</button>
     </div>
+
+    <!-- Canvas para exportar imagen -->
     <div id="export-wrap">
         <div id="menu-canvas">
             <div class="mc-wave"></div>
@@ -720,11 +983,15 @@
             </div>
         </div>
     </div>
+
+    <!-- ══ MODAL CREAR/EDITAR PLATO (con sección de presentaciones inline) ══ -->
     <div class="modal-overlay" id="modal">
         <div class="modal-sheet">
             <h2 id="modal-title">Crear Nuevo Plato</h2>
-            <div class="inp-group"><label>Categoría</label>
-                <select id="m-cat">
+
+            <div class="inp-group">
+                <label>Categoría</label>
+                <select id="m-cat" onchange="UI.onCatChange(this.value)">
                     <option value="SOPAS">🍲 Sopas</option>
                     <option value="SEGUNDOS">🍛 Segundos</option>
                     <option value="ENSALADAS">🥗 Ensaladas</option>
@@ -733,217 +1000,591 @@
                     <option value="ANTOJITOS">🍮 Antojitos</option>
                 </select>
             </div>
-            <div class="inp-group"><label>Nombre del Plato</label><input type="text" id="m-nom"
-                    placeholder="Ej: Arroz con leche" autocomplete="off"></div>
-            <div class="inp-row">
-                <div class="inp-group"><label>Precio (Bs)</label><input type="number" id="m-pre" placeholder="18.00"
-                        step="0.5" min="0"></div>
-                <div class="inp-group"><label>Porciones</label><input type="number" id="m-stock" placeholder="20"
-                        step="1" min="0"></div>
+
+            <div class="inp-group">
+                <label>Nombre del Plato</label>
+                <input type="text" id="m-nom" placeholder="Ej: Refresco de Toronja" autocomplete="off">
             </div>
+
+            <div class="inp-row" id="m-precio-row">
+                <div class="inp-group">
+                    <label>Precio base (Bs)</label>
+                    <input type="number" id="m-pre" placeholder="18.00" step="0.5" min="0">
+                </div>
+                <div class="inp-group">
+                    <label>Porciones</label>
+                    <input type="number" id="m-stock" placeholder="20" step="1" min="0">
+                </div>
+            </div>
+
+            <!-- Nota informativa cuando es refresco -->
+            <div id="m-refresco-hint"
+                style="display:none;background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.25);border-radius:8px;padding:8px 10px;font-size:.75rem;color:#93C5FD;font-weight:600;margin-bottom:4px;">
+                💡 Los refrescos usan precios por tamaño. Agrega sus presentaciones abajo.
+                El precio base se usará solo si no hay tamaños configurados.
+            </div>
+
+            <!-- ════ SECCIÓN PRESENTACIONES INLINE ════ -->
+            <div class="pres-section" id="pres-section">
+                <div class="pres-section-title">Tamaños / Presentaciones</div>
+
+                <!-- Lista de presentaciones ya guardadas -->
+                <div class="pres-list-inline" id="modal-pres-list"></div>
+
+                <!-- Formulario de nueva presentación (siempre visible al crear) -->
+                <div class="pres-form open" id="pres-new-form">
+                    <div class="inp-row">
+                        <input type="text" id="pf-nombre" placeholder="Nombre (Vaso, Jarra…)">
+                        <input type="number" id="pf-precio" placeholder="Precio Bs" step="0.5" min="0">
+                    </div>
+                    <div class="inp-row">
+                        <input type="number" id="pf-stock" placeholder="Stock (vacío=sin límite)" min="0">
+                        <select id="pf-modalidad">
+                            <option value="AMBAS">🔄 Mesa y Llevar</option>
+                            <option value="MESA">🪑 Solo Mesa</option>
+                            <option value="LLEVAR">📦 Solo Llevar</option>
+                        </select>
+                    </div>
+                    <div class="pres-form-btns">
+                        <button class="pres-form-save" onclick="PresManager.agregarNueva()">+ Agregar tamaño</button>
+                        <button class="pres-form-cancel" onclick="PresManager.ocultarFormNueva()">✕</button>
+                    </div>
+                </div>
+
+                <button id="btn-show-pres-form" onclick="PresManager.mostrarFormNueva()" style="display:none;background:rgba(246,184,70,.15);border:1px solid rgba(246,184,70,.25);
+                           color:var(--gold);border-radius:8px;padding:7px 12px;font-size:.78rem;
+                           font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;margin-top:4px;">
+                    + Agregar otro tamaño
+                </button>
+            </div>
+
             <div class="btn-modal-row">
-                <button class="btn-modal cancel" onclick="cerrarModal()">Cancelar</button>
-                <button class="btn-modal" onclick="guardarPlato()" id="btn-save-plato">✓ Guardar</button>
+                <button class="btn-modal cancel" onclick="ModalPlato.cerrar()">Cancelar</button>
+                <button class="btn-modal" onclick="ModalPlato.guardar()" id="btn-save-plato">✓ Guardar plato</button>
             </div>
         </div>
     </div>
 
-    <!-- ══ MODAL: GESTIONAR PRESENTACIONES (tamaños/precios) ══ -->
-    <!-- Pegar antes de </body>, después del modal de crear plato -->
-    <div class="modal-overlay" id="modal-pres">
-        <div class="modal-sheet">
-            <h2 id="pres-modal-titulo">🥤 Tamaños — <span id="pres-plato-titulo"></span></h2>
-            <div id="pres-lista" style="margin-bottom:14px;"></div>
-            <div style="border-top:1px solid rgba(255,255,255,.12);padding-top:14px;">
-                <div style="font-size:.8rem;font-weight:700;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;">
-                    Añadir tamaño
-                </div>
-                <div class="inp-row">
-                    <div class="inp-group">
-                        <label>Nombre</label>
-                        <input type="text" id="pres-new-nombre" placeholder="Vaso / Jarra" autocomplete="off">
-                    </div>
-                    <div class="inp-group">
-                        <label>Precio (Bs)</label>
-                        <input type="number" id="pres-new-precio" placeholder="3" step="0.5" min="0">
-                    </div>
-                </div>
-                <div class="inp-row" style="margin-top:0;">
-                    <div class="inp-group">
-                        <label>Stock</label>
-                        <input type="number" id="pres-new-stock" placeholder="30" step="1" min="0">
-                    </div>
-                    <div class="inp-group" style="justify-content:flex-end;padding-top:24px;">
-                        <button class="btn-modal" onclick="presGuardarNuevo()" style="margin:0;">+ Agregar</button>
-                    </div>
-                </div>
-            </div>
+    <!-- ══ MODAL CONFIRMAR ELIMINAR ══ -->
+    <div class="modal-overlay" id="modal-del">
+        <div class="modal-sheet" style="max-height:fit-content;">
+            <h2 style="color:#FCA5A5;">⚠️ Eliminar plato</h2>
+            <p id="del-msg" style="font-size:.88rem;color:rgba(255,255,255,.7);margin-bottom:16px;"></p>
             <div class="btn-modal-row">
-                <button class="btn-modal cancel" onclick="cerrarModalPres()">Cerrar</button>
+                <button class="btn-modal cancel"
+                    onclick="document.getElementById('modal-del').classList.remove('open')">Cancelar</button>
+                <button class="btn-modal danger" id="btn-del-confirm">Sí, eliminar</button>
             </div>
         </div>
     </div>
 
     <script>
-        document.getElementById('date-display').textContent =
-            new Date().toLocaleDateString('es-BO', { weekday: 'long', day: 'numeric', month: 'long' }).toUpperCase();
+        'use strict';
 
+        // ─── Configuración ────────────────────────────────────────────────────────
         const CATEGORIAS = ['SOPAS', 'SEGUNDOS', 'ENSALADAS', 'REFRESCOS', 'EXTRAS', 'ANTOJITOS'];
         const CAT_META = {
             SOPAS: { label: '🍲 Sopas', cls: '', titleCls: '' },
             SEGUNDOS: { label: '🍛 Segundos', cls: '', titleCls: '' },
-            ENSALADAS: { label: '🥗 Ensalada', cls: '', titleCls: '' },
+            ENSALADAS: { label: '🥗 Ensaladas', cls: '', titleCls: '' },
             REFRESCOS: { label: '🥤 Refrescos', cls: '', titleCls: '' },
             EXTRAS: { label: '🍟 Platos Extras', cls: 'extras', titleCls: 'extras-title' },
             ANTOJITOS: { label: '🍮 Antojitos', cls: 'postres', titleCls: 'postres-title' }
         };
         const DEFAULT_CANT = { SOPAS: 20, SEGUNDOS: 20, ENSALADAS: 20, REFRESCOS: null, ANTOJITOS: 15, EXTRAS: 15 };
+        const MODALIDAD_META = {
+            MESA: { cls: 'badge-mesa', txt: 'Solo mesa' },
+            LLEVAR: { cls: 'badge-llevar', txt: 'Solo llevar' },
+            AMBAS: { cls: 'badge-ambas', txt: 'Mesa y llevar' }
+        };
 
-        document.getElementById('m-cat').addEventListener('change', function() {
-            const isRefresco = this.value === 'REFRESCOS';
-            // Oculta la fila completa de precio y stock si es refresco
-            document.getElementById('m-pre').closest('.inp-row').style.display = isRefresco ? 'none' : 'grid';
-        });
+        document.getElementById('date-display').textContent =
+            new Date().toLocaleDateString('es-BO', { weekday: 'long', day: 'numeric', month: 'long' }).toUpperCase();
 
-        let catalogoMaestro = [], seleccionadosHoy = new Set(), cantidadesHoy = {}, editandoId = null;
+        // ─── Estado global ────────────────────────────────────────────────────────
+        let catalogoMaestro = [], seleccionadosHoy = new Set(), cantidadesHoy = {};
+        let editandoId = null;
 
+        // Presentaciones en memoria durante la edición del modal
+        // Formato: [ { id?, nombre, precio, stock, modalidad, disponible, _nuevo?, _editando? } ]
+        let presEnModal = [];
+
+        // ─── AdminSvc ─────────────────────────────────────────────────────────────
+        const AdminSvc = {
+            async logout() {
+                if (!confirm('¿Cerrar sesión del panel admin?')) return;
+                await fetch('/api/admin/logout', { method: 'POST' });
+                window.location.href = '/mesero';
+            }
+        };
+
+        // ─── API ──────────────────────────────────────────────────────────────────
+        const API = {
+            async req(url, opts = {}) {
+                const r = await fetch(url, {
+                    ...opts,
+                    headers: { 'Content-Type': 'application/json', ...opts.headers }
+                });
+                if (!r.ok) throw new Error(`HTTP ${r.status}`);
+                return r.json();
+            },
+            getPlatos: () => API.req('/api/platos/todos'),
+            crearPlato: (b) => API.req('/api/platos', { method: 'POST', body: JSON.stringify(b) }),
+            editarPlato: (id, b) => API.req(`/api/platos/${id}`, { method: 'PUT', body: JSON.stringify(b) }),
+            eliminarPlato: (id) => fetch(`/api/platos/${id}`, { method: 'DELETE' }),
+            getPresentaciones: (id) => API.req(`/api/platos/${id}/presentaciones`),
+            crearPres: (id, b) => API.req(`/api/platos/${id}/presentaciones`, { method: 'POST', body: JSON.stringify(b) }),
+            editarPres: (id, b) => API.req(`/api/presentaciones/${id}`, { method: 'PUT', body: JSON.stringify(b) }),
+            eliminarPres: (id) => fetch(`/api/presentaciones/${id}`, { method: 'DELETE' })
+        };
+
+        // ─── UI helpers ───────────────────────────────────────────────────────────
+        const UI = {
+            onCatChange(cat) {
+                const esRefresco = cat === 'REFRESCOS';
+                document.getElementById('m-refresco-hint').style.display = esRefresco ? 'block' : 'none';
+                document.getElementById('pres-section').style.display = 'block'; // siempre visible
+            }
+        };
+
+        // ─── Cargar catálogo ──────────────────────────────────────────────────────
         async function cargarCatalogo() {
             try {
-                const res = await fetch('/api/platos/todos'); catalogoMaestro = await res.json();
+                catalogoMaestro = await API.getPlatos();
                 const cantAnt = { ...cantidadesHoy }, selAnt = new Set(seleccionadosHoy);
                 seleccionadosHoy.clear();
                 catalogoMaestro.forEach(p => {
                     if (p.disponible) {
                         seleccionadosHoy.add(p.id);
-                        cantidadesHoy[p.id] = cantAnt[p.id] !== undefined ? cantAnt[p.id] : (p.stockDisponible ?? DEFAULT_CANT[p.categoria] ?? 20);
+                        cantidadesHoy[p.id] = cantAnt[p.id] !== undefined
+                            ? cantAnt[p.id]
+                            : (p.stockDisponible ?? DEFAULT_CANT[p.categoria] ?? 20);
                     }
                 });
-                selAnt.forEach(id => { if (!seleccionadosHoy.has(id)) { const p = catalogoMaestro.find(x => x.id === id); if (p) { seleccionadosHoy.add(id); if (cantAnt[id] !== undefined) cantidadesHoy[id] = cantAnt[id]; } } });
-                if (seleccionadosHoy.size > 0) document.getElementById('btn-save').innerHTML = '💾 Actualizar Menú';
+                selAnt.forEach(id => {
+                    if (!seleccionadosHoy.has(id)) {
+                        const p = catalogoMaestro.find(x => x.id === id);
+                        if (p) { seleccionadosHoy.add(id); if (cantAnt[id] !== undefined) cantidadesHoy[id] = cantAnt[id]; }
+                    }
+                });
+                if (seleccionadosHoy.size > 0)
+                    document.getElementById('btn-save').textContent = '💾 Actualizar Menú';
                 renderizarCategorias();
-            } catch (e) { console.error(e); }
+            } catch (e) { console.error('cargarCatalogo:', e); }
         }
 
+        // ─── Renderizar lista ─────────────────────────────────────────────────────
         function renderizarCategorias() {
             const container = document.getElementById('menu-container');
             const banner = container.querySelector('.day-banner').outerHTML;
             container.innerHTML = banner;
+
             CATEGORIAS.forEach(cat => {
-                const meta = CAT_META[cat] || { label: cat, cls: '', titleCls: '' };
+                const meta = CAT_META[cat];
                 const platos = catalogoMaestro.filter(p => p.categoria.toUpperCase() === cat);
                 const section = document.createElement('div');
                 section.className = `cat-section${meta.cls ? ' ' + meta.cls : ''}`;
-                const grid = platos.map(p => {
-                    const activo = seleccionadosHoy.has(p.id), qty = cantidadesHoy[p.id] ?? DEFAULT_CANT[cat] ?? 20;
-                    return `<div class="plato-card${activo ? ' active' : ''}" id="card-${p.id}" onclick="togglePlato(${p.id},'${cat}')">
-        
-                        <button class="btn-edit" style="left:4px;" onclick="abrirModalEdicion(event,${p.id})">✏️</button>
-                        
-                        <button class="btn-edit" style="left:32px; background: rgba(59, 130, 246, 0.4); border-color: rgba(59, 130, 246, 0.6);" onclick="abrirModalPresentaciones(event, ${p.id}, '${p.nombre.replace(/'/g, "\\'")}')" title="Configurar Tamaños">🥤</button>
-                        
-                        ${p.presentaciones && p.presentaciones.length > 0 ? `<div style="position:absolute;bottom:28px;left:0;right:0;background:rgba(246,184,70,.15);font-size:.6rem;font-weight:800;color:var(--gold);text-align:center;padding:2px;">${p.presentaciones.length} tamaños</div>` : ''}
-                        <div class="p-name">${p.nombre}</div><div class="p-price">Bs. ${p.precio}</div>
-                        <div class="qty-control" id="qty-${p.id}" onclick="event.stopPropagation()">
-                            <button class="qty-btn" onclick="adjQty(${p.id},-5)">-5</button>
-                            <button class="qty-btn" onclick="adjQty(${p.id},-1)">−</button>
-                            <input class="qty-input" id="qn-${p.id}" type="number" value="${qty}" min="0" step="1"
-                                onchange="setQty(${p.id},this.value)" onclick="event.stopPropagation()">
-                            <button class="qty-btn" onclick="adjQty(${p.id},1)">+</button>
-                            <button class="qty-btn" onclick="adjQty(${p.id},5)">+5</button>
-                        </div>
-                        <span class="qty-label" id="ql-${p.id}" style="${activo ? '' : 'display:none'}">porciones</span>
-                    </div>`;
-                }).join('');
-                section.innerHTML = `<div class="cat-head">
-                <span class="cat-title${meta.titleCls ? ' ' + meta.titleCls : ''}">${meta.label}</span>
-                        <button style="background:rgba(59,130,246,.2);color:#93C5FD;border:1px solid rgba(59,130,246,.3);padding:6px 10px;border-radius:8px;font-size:.75rem;font-weight:800;cursor:pointer;"
-            onclick="abrirModalNueva('${cat}')">+ Plato</button>
-            </div><div class="platos-grid">${grid || `<div style="font-size:.8rem;color:rgba(255,255,255,0.4);padding:8px 0;">No hay platos en ${meta.label}</div>`}</div>`;
+
+                // ── Encabezado ──
+                section.innerHTML = `
+                <div class="cat-head">
+                    <span class="cat-title${meta.titleCls ? ' ' + meta.titleCls : ''}">${meta.label}</span>
+                    <button class="btn-add-plato" onclick="ModalPlato.abrirNuevo('${cat}')">+ Añadir</button>
+                </div>
+                <div class="platos-list" id="list-${cat}"></div>`;
+
                 container.appendChild(section);
+
+                const list = document.getElementById(`list-${cat}`);
+                if (!platos.length) {
+                    list.innerHTML = `<p style="padding:10px 14px;font-size:.78rem;color:rgba(255,255,255,.3);">Sin platos en esta categoría</p>`;
+                    return;
+                }
+                platos.forEach(p => list.appendChild(buildPlatoRow(p, cat)));
             });
         }
 
+        function buildPlatoRow(p, cat) {
+            const activo  = seleccionadosHoy.has(p.id);
+            const qty     = cantidadesHoy[p.id];
+            const hasPres = p.presentaciones && p.presentaciones.length > 0;
+        
+            const precioDisplay = hasPres
+                ? `desde Bs. ${Math.min(...p.presentaciones.map(x => x.precio)).toFixed(0)}`
+                : `Bs. ${p.precio}`;
+        
+            let stockBadge = '';
+            if (qty === null || qty === undefined) {
+                stockBadge = `<span class="plato-stock sin-control">∞ sin límite</span>`;
+            } else {
+                stockBadge = `<span class="plato-stock" id="sbadge-${p.id}">${qty} porciones</span>`;
+            }
+        
+            const presBadge = hasPres
+                ? `<span class="pres-badge">🥤 ${p.presentaciones.length} tamaños</span>`
+                : '';
+        
+            /* Control de cantidad — solo si tiene stock definido */
+            const qtyControl = (qty !== null && qty !== undefined) ? `
+                <div class="qty-inline" onclick="event.stopPropagation()">
+                    <button class="qty-btn-sm" onclick="adjQty(${p.id},-1)">−</button>
+                    <input  class="qty-num-sm" id="qn-${p.id}" type="number"
+                            value="${qty}" min="0" step="1"
+                            onchange="setQty(${p.id},this.value)">
+                    <button class="qty-btn-sm" onclick="adjQty(${p.id},1)">+</button>
+                </div>` : '';
+        
+            const row = document.createElement('div');
+            row.className = 'plato-row';
+            row.id = `row-${p.id}`;
+        
+            row.innerHTML = `
+                <!-- Fila superior: nombre del plato -->
+                <div class="plato-row-top">
+                    <div class="plato-info">
+                        <div class="plato-nombre">${p.nombre}</div>
+                        <div class="plato-meta">
+                            <span class="plato-precio">${precioDisplay}</span>
+                            ${stockBadge}
+                            ${presBadge}
+                        </div>
+                    </div>
+                </div>
+        
+                <!-- Fila inferior: toggle + cantidad + botones -->
+                <div class="plato-row-bottom">
+                    <div class="toggle-wrap">
+                        <div class="toggle-track ${activo ? 'on' : ''}" id="tog-${p.id}"
+                            onclick="togglePlato(${p.id},'${cat}')">
+                            <div class="toggle-thumb"></div>
+                        </div>
+                    </div>
+        
+                    ${qtyControl}
+        
+                    <div class="plato-actions">
+                        <button class="act-btn pres" title="Tamaños"
+                                onclick="ModalPlato.abrirEdicion(event,${p.id},true)">🥤</button>
+                        <button class="act-btn edit" title="Editar"
+                                onclick="ModalPlato.abrirEdicion(event,${p.id},false)">✏️</button>
+                        <button class="act-btn del"  title="Eliminar"
+                                onclick="confirmarEliminar(${p.id},'${p.nombre.replace(/'/g,"\\'")}')">🗑</button>
+                    </div>
+                </div>`;
+        
+            return row;
+        }
+
+        // ─── Toggle activo ────────────────────────────────────────────────────────
         function togglePlato(id, cat) {
-            const card = document.getElementById('card-' + id), ql = document.getElementById('ql-' + id);
-            if (seleccionadosHoy.has(id)) { seleccionadosHoy.delete(id); card.classList.remove('active'); if (ql) ql.style.display = 'none'; }
-            else { seleccionadosHoy.add(id); if (cantidadesHoy[id] === undefined) cantidadesHoy[id] = DEFAULT_CANT[cat] ?? 20; card.classList.add('active'); if (ql) ql.style.display = ''; }
-        }
-        // 3. Adaptar los botones de Sumar y Restar de la tarjeta para que soporten "Infinito" (null)
-        function setQty(id, v) { 
-            if (v === '') cantidadesHoy[id] = null; // Si borran el número, se vuelve infinito
-            else cantidadesHoy[id] = Math.max(0, parseInt(v, 10) || 0); 
-        }
-
-        function adjQty(id, delta) { 
-            if (cantidadesHoy[id] === null) return; // Si es infinito, sumar o restar no hace nada
-            cantidadesHoy[id] = Math.max(0, (cantidadesHoy[id] ?? 0) + delta); 
-            const el = document.getElementById('qn-' + id); 
-            if (el) el.value = cantidadesHoy[id]; 
+            const tog = document.getElementById(`tog-${id}`);
+            if (seleccionadosHoy.has(id)) {
+                seleccionadosHoy.delete(id);
+                tog?.classList.remove('on');
+            } else {
+                seleccionadosHoy.add(id);
+                if (cantidadesHoy[id] === undefined) cantidadesHoy[id] = DEFAULT_CANT[cat] ?? 20;
+                tog?.classList.add('on');
+            }
         }
 
+        function adjQty(id, delta) {
+            if (cantidadesHoy[id] === null) return;
+            cantidadesHoy[id] = Math.max(0, (cantidadesHoy[id] ?? 0) + delta);
+            const el = document.getElementById(`qn-${id}`); if (el) el.value = cantidadesHoy[id];
+            const badge = document.getElementById(`sbadge-${id}`); if (badge) badge.textContent = `${cantidadesHoy[id]} porciones`;
+        }
+
+        function setQty(id, v) {
+            cantidadesHoy[id] = v === '' ? null : Math.max(0, parseInt(v, 10) || 0);
+        }
+
+        // ─── Publicar menú ────────────────────────────────────────────────────────
         async function guardarMenuDelDia() {
-            const btn = document.getElementById('btn-save'); btn.innerHTML = '⏳ Publicando...'; btn.disabled = true;
-    
-            // AQUÍ EL CAMBIO CLAVE: no ponemos "?? 20". Enviamos el valor real, que puede ser null.
-            const payload = Array.from(seleccionadosHoy).map(id => ({ id, cantidad: cantidadesHoy[id] }));
-            
+            const btn = document.getElementById('btn-save');
+            btn.textContent = '⏳ Publicando...'; btn.disabled = true;
+            const payload = Array.from(seleccionadosHoy).map(id => ({ id, cantidad: cantidadesHoy[id] ?? null }));
             try {
-                const res = await fetch('/api/menu-diario', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-                if (!res.ok) throw new Error('HTTP ' + res.status);
-                btn.style.background = '#3B82F6'; btn.innerHTML = '✅ ¡Menú Publicado!';
-                setTimeout(() => { btn.style.background = 'var(--green)'; btn.innerHTML = '💾 Actualizar Menú'; btn.disabled = false; }, 3000);
-            } catch (e) { alert('Error: ' + e.message); btn.innerHTML = '💾 Publicar Menú'; btn.disabled = false; }
+                await fetch('/api/menu-diario', {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                btn.style.background = '#3B82F6'; btn.textContent = '✅ ¡Menú Publicado!';
+                setTimeout(() => { btn.style.background = 'var(--green)'; btn.textContent = '💾 Actualizar Menú'; btn.disabled = false; }, 2800);
+            } catch (e) {
+                alert('Error: ' + e.message); btn.textContent = '💾 Publicar Menú'; btn.disabled = false;
+            }
         }
 
-        function abrirModalNueva(cat) {
-            editandoId = null;
-            document.getElementById('modal-title').textContent = 'Crear Nuevo Plato';
-            document.getElementById('m-cat').value = cat;
-            document.getElementById('m-nom').value = '';
-            document.getElementById('m-pre').value = (cat === 'ANTOJITOS' || cat === 'POSTRES') ? '15' : '18';
-            document.getElementById('m-stock').value = DEFAULT_CANT[cat] ?? 20;
-            document.getElementById('m-cat').dispatchEvent(new Event('change'));
-            document.getElementById('modal').classList.add('open');
-            setTimeout(() => document.getElementById('m-nom').focus(), 300);
-        }
-        function abrirModalEdicion(event, id) {
-            event.stopPropagation();
-            const p = catalogoMaestro.find(x => x.id === id); if (!p) return;
-            editandoId = id;
-            document.getElementById('modal-title').textContent = 'Editar Plato';
-            document.getElementById('m-cat').value = p.categoria;
-            document.getElementById('m-nom').value = p.nombre;
-            document.getElementById('m-pre').value = p.precio;
-            document.getElementById('m-stock').value = cantidadesHoy[id] ?? p.stockDisponible ?? 0;
-            document.getElementById('m-cat').dispatchEvent(new Event('change'));
-            document.getElementById('modal').classList.add('open');
-            setTimeout(() => document.getElementById('m-nom').focus(), 300);
-        }
-        function cerrarModal() { document.getElementById('modal').classList.remove('open'); }
-
-        async function guardarPlato() {
-            const btn = document.getElementById('btn-save-plato');
-            const nom = document.getElementById('m-nom').value.trim();
-            const cat = document.getElementById('m-cat').value;
-
-            const preVal = document.getElementById('m-pre').value;
-            const pre = (cat === 'REFRESCOS' || preVal === '') ? 0 : parseFloat(preVal);
-
-            const mStockVal = document.getElementById('m-stock').value;
-            const stock = mStockVal === '' ? null : parseInt(mStockVal, 10);
-
-            btn.disabled = true; btn.innerHTML = '...';
-            try {
-                const method = editandoId ? 'PUT' : 'POST', url = editandoId ? '/api/platos/' + editandoId : '/api/platos';
-                const res = await fetch(url, { method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ nombre: nom, precio: pre, categoria: cat, stockDisponible: stock }) });
-                if (!res.ok) throw new Error('HTTP ' + res.status);
-                const g = await res.json(); cantidadesHoy[g.id] = stock; 
-                seleccionadosHoy.add(g.id); // Siempre lo marcamos como activo al crearlo
-                await cargarCatalogo(); cerrarModal();
-            } catch (e) { alert('Error: ' + e.message); }
-            finally { btn.disabled = false; btn.innerHTML = '✓ Guardar'; }
+        // ─── Eliminar plato ───────────────────────────────────────────────────────
+        function confirmarEliminar(id, nombre) {
+            document.getElementById('del-msg').textContent = `¿Eliminar "${nombre}"? Esta acción no se puede deshacer.`;
+            const modal = document.getElementById('modal-del');
+            modal.classList.add('open');
+            document.getElementById('btn-del-confirm').onclick = async () => {
+                modal.classList.remove('open');
+                try {
+                    await API.eliminarPlato(id);
+                    await cargarCatalogo();
+                } catch (e) { alert('Error al eliminar: ' + e.message); }
+            };
         }
 
+        // ─── PresManager — gestión de presentaciones en el modal ─────────────────
+        const PresManager = {
+            /** Carga presentaciones guardadas de un plato existente */
+            async cargarDesdeServidor(platoId) {
+                try {
+                    const lista = await API.getPresentaciones(platoId);
+                    presEnModal = lista.map(pr => ({ ...pr, _nuevo: false, _editando: false }));
+                } catch (e) {
+                    presEnModal = [];
+                }
+                this.renderLista();
+            },
+
+            /** Inicia con lista vacía (plato nuevo) */
+            iniciarVacia() {
+                presEnModal = [];
+                this.renderLista();
+                this.mostrarFormNueva();
+            },
+
+            renderLista() {
+                const container = document.getElementById('modal-pres-list');
+                if (!presEnModal.length) {
+                    container.innerHTML = `<p style="font-size:.75rem;color:rgba(255,255,255,.3);padding:4px 0;">
+                    Sin tamaños. El plato usará el precio base.</p>`;
+                    return;
+                }
+                container.innerHTML = '';
+                presEnModal.forEach((pr, idx) => {
+                    const meta = MODALIDAD_META[pr.modalidad || 'AMBAS'];
+                    const item = document.createElement('div');
+                    item.className = `pres-item${pr._editando ? ' editing' : ''}`;
+                    item.id = `pitem-${idx}`;
+
+                    if (pr._editando) {
+                        // Modo edición inline
+                        item.innerHTML = `
+                        <div style="flex:1;">
+                            <div class="pres-form open" style="background:none;border:none;padding:0;">
+                                <div class="inp-row">
+                                    <input type="text"   id="pe-nombre-${idx}"   value="${pr.nombre}"   placeholder="Nombre">
+                                    <input type="number" id="pe-precio-${idx}"   value="${pr.precio}"   placeholder="Precio Bs" step="0.5">
+                                </div>
+                                <div class="inp-row">
+                                    <input type="number" id="pe-stock-${idx}"    value="${pr.stockDisponible ?? ''}" placeholder="Stock">
+                                    <select id="pe-modalidad-${idx}">
+                                        <option value="AMBAS"  ${(pr.modalidad || 'AMBAS') === 'AMBAS' ? 'selected' : ''}>🔄 Mesa y Llevar</option>
+                                        <option value="MESA"   ${pr.modalidad === 'MESA' ? 'selected' : ''}>🪑 Solo Mesa</option>
+                                        <option value="LLEVAR" ${pr.modalidad === 'LLEVAR' ? 'selected' : ''}>📦 Solo Llevar</option>
+                                    </select>
+                                </div>
+                                <div class="pres-form-btns">
+                                    <button class="pres-form-save"   onclick="PresManager.guardarEdicion(${idx})">✓ Guardar cambios</button>
+                                    <button class="pres-form-cancel" onclick="PresManager.cancelarEdicion(${idx})">✕</button>
+                                </div>
+                            </div>
+                        </div>`;
+                    } else {
+                        // Modo lectura
+                        item.innerHTML = `
+                        <div class="pres-item-info">
+                            <span class="pres-item-nombre">${pr.nombre}</span>
+                            <span class="pres-item-precio"> — Bs. ${pr.precio}</span>
+                            <div class="pres-item-meta">
+                                <span class="pres-item-badge ${meta.cls}">${meta.txt}</span>
+                                ${pr.stockDisponible != null ? `<span class="pres-item-badge badge-ambas">${pr.stockDisponible} uds.</span>` : ''}
+                                ${pr.disponible === false ? `<span class="pres-item-badge badge-inact">Inactivo</span>` : ''}
+                            </div>
+                        </div>
+                        <div class="pres-item-btns">
+                            <button class="pres-act edit-p" onclick="PresManager.iniciarEdicion(${idx})" title="Editar">✏️</button>
+                            <button class="pres-act del-p"  onclick="PresManager.eliminar(${idx})"       title="Eliminar">✕</button>
+                        </div>`;
+                    }
+                    container.appendChild(item);
+                });
+            },
+
+            /** Agrega nueva presentación (desde el form de nueva) */
+            async agregarNueva() {
+                const nombre = document.getElementById('pf-nombre').value.trim();
+                const precio = parseFloat(document.getElementById('pf-precio').value);
+                const stockVal = document.getElementById('pf-stock').value;
+                const stock = stockVal === '' ? null : parseInt(stockVal, 10);
+                const modalidad = document.getElementById('pf-modalidad').value;
+
+                if (!nombre || isNaN(precio)) { alert('Completa nombre y precio'); return; }
+
+                const nuevaPres = { nombre, precio, stockDisponible: stock, modalidad, disponible: true, _nuevo: true, _editando: false };
+
+                if (editandoId) {
+                    // Plato ya existente → guardar en servidor de inmediato
+                    try {
+                        const saved = await API.crearPres(editandoId, { nombre, precio, stockDisponible: stock, modalidad, disponible: true });
+                        presEnModal.push({ ...saved, _nuevo: false, _editando: false });
+                    } catch (e) { alert('Error al guardar tamaño: ' + e.message); return; }
+                } else {
+                    presEnModal.push(nuevaPres);
+                }
+
+                // Limpiar form
+                document.getElementById('pf-nombre').value = '';
+                document.getElementById('pf-precio').value = '';
+                document.getElementById('pf-stock').value = '';
+                document.getElementById('pf-modalidad').value = 'AMBAS';
+
+                this.ocultarFormNueva();
+                this.renderLista();
+            },
+
+            iniciarEdicion(idx) {
+                presEnModal.forEach(p => p._editando = false);
+                presEnModal[idx]._editando = true;
+                this.renderLista();
+            },
+
+            cancelarEdicion(idx) {
+                presEnModal[idx]._editando = false;
+                this.renderLista();
+            },
+
+            async guardarEdicion(idx) {
+                const pr = presEnModal[idx];
+                const nombre = document.getElementById(`pe-nombre-${idx}`).value.trim();
+                const precio = parseFloat(document.getElementById(`pe-precio-${idx}`).value);
+                const stockVal = document.getElementById(`pe-stock-${idx}`).value;
+                const stock = stockVal === '' ? null : parseInt(stockVal, 10);
+                const modalidad = document.getElementById(`pe-modalidad-${idx}`).value;
+
+                if (!nombre || isNaN(precio)) { alert('Completa nombre y precio'); return; }
+
+                const cambios = { nombre, precio, stockDisponible: stock, modalidad };
+
+                if (pr.id) {
+                    // Ya existe en BD → PATCH al servidor
+                    try { await API.editarPres(pr.id, cambios); }
+                    catch (e) { alert('Error al editar: ' + e.message); return; }
+                }
+
+                Object.assign(presEnModal[idx], cambios, { _editando: false });
+                this.renderLista();
+            },
+
+            async eliminar(idx) {
+                const pr = presEnModal[idx];
+                if (!confirm(`¿Eliminar "${pr.nombre}"?`)) return;
+                if (pr.id) {
+                    try { await API.eliminarPres(pr.id); }
+                    catch (e) { alert('Error: ' + e.message); return; }
+                }
+                presEnModal.splice(idx, 1);
+                this.renderLista();
+            },
+
+            mostrarFormNueva() {
+                document.getElementById('pres-new-form').classList.add('open');
+                document.getElementById('btn-show-pres-form').style.display = 'none';
+                document.getElementById('pf-nombre').focus();
+            },
+
+            ocultarFormNueva() {
+                document.getElementById('pres-new-form').classList.remove('open');
+                document.getElementById('btn-show-pres-form').style.display = 'block';
+            }
+        };
+
+        // ─── ModalPlato ───────────────────────────────────────────────────────────
+        const ModalPlato = {
+            /** Abrir modal para crear nuevo plato */
+            abrirNuevo(cat) {
+                editandoId = null;
+                presEnModal = [];
+                document.getElementById('modal-title').textContent = 'Crear Nuevo Plato';
+                document.getElementById('m-cat').value = cat;
+                document.getElementById('m-nom').value = '';
+                document.getElementById('m-pre').value = cat === 'REFRESCOS' ? '0' : (cat === 'ANTOJITOS' || cat === 'EXTRAS') ? '15' : '18';
+                document.getElementById('m-stock').value = DEFAULT_CANT[cat] ?? '';
+                UI.onCatChange(cat);
+                PresManager.iniciarVacia();
+                document.getElementById('modal').classList.add('open');
+                setTimeout(() => document.getElementById('m-nom').focus(), 300);
+            },
+
+            /** Abrir modal para editar plato existente */
+            async abrirEdicion(event, id, irAPresentaciones = false) {
+                event.stopPropagation();
+                const p = catalogoMaestro.find(x => x.id === id); if (!p) return;
+                editandoId = id;
+
+                document.getElementById('modal-title').textContent = 'Editar Plato';
+                document.getElementById('m-cat').value = p.categoria;
+                document.getElementById('m-nom').value = p.nombre;
+                document.getElementById('m-pre').value = p.precio;
+                document.getElementById('m-stock').value = cantidadesHoy[id] ?? p.stockDisponible ?? '';
+                UI.onCatChange(p.categoria);
+
+                await PresManager.cargarDesdeServidor(id);
+                document.getElementById('modal').classList.add('open');
+
+                if (irAPresentaciones) {
+                    // Scroll hasta la sección de presentaciones
+                    setTimeout(() => {
+                        document.getElementById('pres-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        PresManager.mostrarFormNueva();
+                    }, 350);
+                } else {
+                    setTimeout(() => document.getElementById('m-nom').focus(), 300);
+                }
+            },
+
+            cerrar() { document.getElementById('modal').classList.remove('open'); },
+
+            async guardar() {
+                const btn = document.getElementById('btn-save-plato');
+                const nom = document.getElementById('m-nom').value.trim();
+                const cat = document.getElementById('m-cat').value;
+                const preVal = document.getElementById('m-pre').value;
+                const pre = (cat === 'REFRESCOS' && preVal === '') ? 0 : parseFloat(preVal) || 0;
+                const sVal = document.getElementById('m-stock').value;
+                const stock = sVal === '' ? null : parseInt(sVal, 10);
+
+                if (!nom) { alert('Escribe el nombre del plato'); return; }
+                btn.disabled = true; btn.textContent = '...';
+
+                try {
+                    let platoId = editandoId;
+                    if (editandoId) {
+                        await API.editarPlato(editandoId, { nombre: nom, precio: pre, categoria: cat, stockDisponible: stock });
+                    } else {
+                        const created = await API.crearPlato({ nombre: nom, precio: pre, categoria: cat, stockDisponible: stock });
+                        platoId = created.id;
+                        cantidadesHoy[platoId] = stock;
+                        seleccionadosHoy.add(platoId);
+
+                        // Guardar presentaciones nuevas en el servidor
+                        for (const pr of presEnModal.filter(x => x._nuevo)) {
+                            await API.crearPres(platoId, {
+                                nombre: pr.nombre, precio: pr.precio,
+                                stockDisponible: pr.stockDisponible,
+                                modalidad: pr.modalidad, disponible: true
+                            });
+                        }
+                    }
+
+                    await cargarCatalogo();
+                    this.cerrar();
+                } catch (e) {
+                    alert('Error al guardar: ' + e.message);
+                } finally {
+                    btn.disabled = false; btn.textContent = '✓ Guardar plato';
+                }
+            }
+        };
+
+        // ─── Generar imagen ───────────────────────────────────────────────────────
         async function generarImagenMenu() {
             const dias = ['DOMINGO', 'LUNES', 'MARTES', 'MIÉRCOLES', 'JUEVES', 'VIERNES', 'SÁBADO'];
             const meses = ['ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO', 'JUNIO', 'JULIO', 'AGOSTO', 'SEPTIEMBRE', 'OCTUBRE', 'NOVIEMBRE', 'DICIEMBRE'];
@@ -955,112 +1596,17 @@
             document.getElementById('cv-segundos').innerHTML = mapear('SEGUNDOS');
             document.getElementById('cv-ensaladas').innerHTML = mapear('ENSALADAS');
             document.getElementById('cv-refrescos').innerHTML = mapear('REFRESCOS');
-            document.getElementById('cv-extras').innerHTML = activos.filter(p => p.categoria === 'ANTOJITOS' || p.categoria === 'POSTRES').map(p => `<div>${p.nombre}</div>`).join('');
+            document.getElementById('cv-extras').innerHTML = activos.filter(p => p.categoria === 'ANTOJITOS' || p.categoria === 'EXTRAS').map(p => `<div>${p.nombre}</div>`).join('');
             try {
                 const canvas = await html2canvas(document.getElementById('menu-canvas'), { scale: 2, useCORS: true, allowTaint: true, backgroundColor: '#7C2100' });
                 const link = document.createElement('a');
                 link.download = `Menu_EkweIyawe_${d.getDate()}_${meses[d.getMonth()]}.jpg`;
-                link.href = canvas.toDataURL('image/jpeg', 0.95); link.click();
+                link.href = canvas.toDataURL('image/jpeg', .95); link.click();
             } catch (err) { alert('Error al generar imagen.'); }
         }
-        cargarCatalogo();
 
-        // ─── Estado presentaciones ────────────────────────────────────────────────────
-        let presEditandoPlatoId = null;
-        let presEditandoPlatoNombre = '';
-        
-        // ─── Abrir modal de presentaciones ────────────────────────────────────────────
-        async function abrirModalPresentaciones(event, platoId, platoNombre) {
-            event.stopPropagation();
-            presEditandoPlatoId = platoId;
-            presEditandoPlatoNombre = platoNombre;
-            document.getElementById('pres-plato-titulo').textContent = platoNombre;
-            document.getElementById('pres-new-nombre').value = '';
-            document.getElementById('pres-new-precio').value = '';
-            document.getElementById('pres-new-stock').value = '30';
-            await cargarPresentaciones();
-            document.getElementById('modal-pres').classList.add('open');
-            setTimeout(() => document.getElementById('pres-new-nombre').focus(), 300);
-        }
-        
-        function cerrarModalPres() { document.getElementById('modal-pres').classList.remove('open'); }
-        
-        // ─── Cargar y renderizar presentaciones ───────────────────────────────────────
-        async function cargarPresentaciones() {
-            const container = document.getElementById('pres-lista');
-            try {
-                const res = await fetch(`/api/platos/${presEditandoPlatoId}/presentaciones`);
-                const lista = await res.json();
-                if (!lista.length) {
-                    container.innerHTML = `<p style="font-size:.8rem;color:rgba(255,255,255,.35);text-align:center;padding:8px 0;">
-                        Sin tamaños configurados. Este plato usará su precio base al registrar pedidos.</p>`;
-                    return;
-                }
-                container.innerHTML = lista.map(pr => `
-                    <div id="pres-row-${pr.id}" style="display:flex;align-items:center;gap:8px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.1);">
-                        <div style="flex:1;">
-                            <span style="font-weight:800;font-size:.9rem;color:#fff;">${pr.nombre}</span>
-                            <span style="font-size:.8rem;color:var(--gold);font-weight:900;margin-left:8px;">Bs. ${pr.precio}</span>
-                            ${pr.stockDisponible != null ? `<span style="font-size:.7rem;background:rgba(255,255,255,.1);border-radius:5px;padding:1px 6px;margin-left:5px;color:rgba(255,255,255,.5);">${pr.stockDisponible} porciones</span>` : ''}
-                            ${!pr.disponible ? `<span style="font-size:.7rem;background:#FEE2E2;color:#991B1B;border-radius:5px;padding:1px 6px;margin-left:5px;">Inactivo</span>` : ''}
-                        </div>
-                        <button onclick="presToggleDisponible(${pr.id}, ${!pr.disponible})"
-                            style="background:${pr.disponible?'rgba(239,68,68,.15)':'rgba(34,197,94,.15)'};border:1px solid ${pr.disponible?'rgba(239,68,68,.3)':'rgba(34,197,94,.3)'};color:${pr.disponible?'#FCA5A5':'#86EFAC'};border-radius:6px;padding:4px 9px;font-size:.72rem;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif;">
-                            ${pr.disponible?'Desactivar':'Activar'}
-                        </button>
-                        <button onclick="presEliminar(${pr.id})"
-                            style="background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.2);color:#FCA5A5;border-radius:6px;padding:4px 8px;font-size:.72rem;cursor:pointer;font-family:'Nunito',sans-serif;">
-                            ✕
-                        </button>
-                    </div>`).join('');
-            } catch(e) {
-                container.innerHTML = `<p style="color:#FCA5A5;font-size:.8rem;">Error al cargar tamaños</p>`;
-            }
-        }
-        
-        // ─── Guardar nueva presentación ───────────────────────────────────────────────
-        async function presGuardarNuevo() {
-            const nombre = document.getElementById('pres-new-nombre').value.trim();
-            const precio = parseFloat(document.getElementById('pres-new-precio').value);
-            const pStockVal = document.getElementById('pres-new-stock').value;
-            const stock = pStockVal === '' ? null : parseInt(pStockVal, 10);
-            if (!nombre || isNaN(precio)) return alert('Completa nombre y precio');
-            try {
-                const res = await fetch(`/api/platos/${presEditandoPlatoId}/presentaciones`, {
-                    method: 'POST',
-                    headers: {'Content-Type':'application/json'},
-                    body: JSON.stringify({ nombre, precio, stockDisponible: stock, disponible: true })
-                });
-                if (!res.ok) throw new Error('HTTP ' + res.status);
-                document.getElementById('pres-new-nombre').value = '';
-                document.getElementById('pres-new-precio').value = '';
-                await cargarPresentaciones();
-                // Actualizar la tarjeta del plato en la página
-                await cargarCatalogo();
-            } catch(e) { alert('Error al guardar: ' + e.message); }
-        }
-        
-        // ─── Toggle disponible ────────────────────────────────────────────────────────
-        async function presToggleDisponible(presId, nuevaDisponibilidad) {
-            try {
-                await fetch(`/api/presentaciones/${presId}`, {
-                    method: 'PUT',
-                    headers: {'Content-Type':'application/json'},
-                    body: JSON.stringify({ disponible: nuevaDisponibilidad })
-                });
-                await cargarPresentaciones();
-            } catch(e) { alert('Error: ' + e.message); }
-        }
-        
-        // ─── Eliminar presentación ────────────────────────────────────────────────────
-        async function presEliminar(presId) {
-            if (!confirm('¿Eliminar este tamaño?')) return;
-            try {
-                await fetch(`/api/presentaciones/${presId}`, { method: 'DELETE' });
-                await cargarPresentaciones();
-                await cargarCatalogo();
-            } catch(e) { alert('Error al eliminar: ' + e.message); }
-        }
+        // ─── Arranque ─────────────────────────────────────────────────────────────
+        cargarCatalogo();
     </script>
 </body>
 

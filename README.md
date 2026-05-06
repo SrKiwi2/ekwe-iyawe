@@ -22,6 +22,17 @@
 ## 📸 Capturas del Sistema
 
 <div align="center">
+  <img src="screenshots/1e.jpeg" width="45%" />
+  <img src="screenshots/2e.jpeg" width="45%" />
+  <br><br>
+  <img src="screenshots/3e.jpeg" width="45%" />
+  <img src="screenshots/4e.jpeg" width="45%" />
+  <br><br>
+  <img src="screenshots/5e.jpeg" width="45%" />
+  <img src="screenshots/6e.jpeg" width="45%" />
+</div>
+
+<div align="center">
 
 ### 🧑‍💼 Panel del Mesero — Inicio de Pedido
 ![Panel Mesero](screenshots/mesero-inicio.png)

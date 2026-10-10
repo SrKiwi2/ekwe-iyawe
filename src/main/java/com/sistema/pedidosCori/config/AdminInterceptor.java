@@ -20,11 +20,8 @@ public class AdminInterceptor implements HandlerInterceptor{
  
         HttpSession session = req.getSession(false);
         if (session != null && Boolean.TRUE.equals(session.getAttribute(SESSION_KEY))) {
-            return true; // sesión válida → permitir
+            return true;
         }
- 
-        // No autenticado → redirigir al mesero con flag ?admin=1
-        // El mesero detecta ese param y abre el modal de PIN automáticamente
         res.sendRedirect("/mesero?admin=1");
         return false;
     }

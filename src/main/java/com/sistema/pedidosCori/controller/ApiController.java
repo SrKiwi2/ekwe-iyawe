@@ -53,7 +53,7 @@ public class ApiController {
     private final IPresentacionPlatoDao presentacionPlatoDao;
     private final SimpMessagingTemplate messagingTemplate;
 
-    // ── Platos ───────────────────────────────────────────────────────────────
+    // Platos
  
     @GetMapping("/platos/todos")
     public ResponseEntity<List<Plato>> getTodosLosPlatos() {
@@ -81,7 +81,7 @@ public class ApiController {
         }).orElse(ResponseEntity.notFound().build());
     }
  
-    // ── Presentaciones (tamaños/precios por plato) ───────────────────────────
+    // Presentaciones (tamaños/precios por plato)
  
         @GetMapping("/platos/{id}/presentaciones")
     public ResponseEntity<List<PresentacionPlato>> getPresentaciones(
@@ -142,7 +142,7 @@ public class ApiController {
         return ResponseEntity.ok().build();
     }
  
-    // ── Pedidos — crear ───────────────────────────────────────────────────────
+    // Pedidos — crear
  
     @PostMapping("/pedidos")
     @Transactional
@@ -166,7 +166,7 @@ public class ApiController {
         return ResponseEntity.ok(pedido);
     }
  
-    // ── Pedidos — agregar items a comanda abierta ─────────────────────────────
+    // Pedidos — agregar items a comanda abierta 
  
     @PostMapping("/pedidos/{id}/detalles")
     @Transactional
@@ -201,7 +201,7 @@ public class ApiController {
         return ResponseEntity.ok(saved);
     }
  
-    // ── Estado / activos / pago ───────────────────────────────────────────────
+    // ── Estado / activos / pagoooooo
  
     @PutMapping("/pedidos/{id}/estado")
     public ResponseEntity<Pedido> actualizarEstado(@PathVariable Long id, @RequestParam EstadoPedido estado) {
@@ -239,7 +239,7 @@ public class ApiController {
         return ResponseEntity.ok(pedido);
     }
  
-    // ── Menu diario ───────────────────────────────────────────────────────────
+    // Menu diario 
  
     @PostMapping("/menu-diario")
     @Transactional
@@ -257,7 +257,7 @@ public class ApiController {
         return ResponseEntity.ok(Collections.singletonMap("status", "Menu actualizado"));
     }
  
-    // ── Reportes ─────────────────────────────────────────────────────────────
+    // Reportes
  
     @GetMapping("/reportes/diarios")
     public ResponseEntity<List<ReporteDiarioDTO>> getReportesDiarios() {
@@ -294,7 +294,7 @@ public class ApiController {
         return ResponseEntity.ok(reportes);
     }
  
-    // ── Helpers ──────────────────────────────────────────────────────────────
+    // Helpers 
  
     private String labelPedido(Pedido p) {
         return p.getNumeroMesa() != null ? "Mesa " + p.getNumeroMesa() : p.getNombreCliente();
@@ -302,10 +302,9 @@ public class ApiController {
  
     private void aplicarDescuentoStock(Map<Long,Integer> descPlato, Map<Long,Integer> descPres, Map<Long,Integer> descSopa) {
         
-        // 1. Descontar Platos Base (Segundos, Ensaladas, etc.)
         descPlato.forEach((pid, q) -> {
             platoDao.findById(pid).ifPresent(p -> {
-                if (p.getStockDisponible() != null) { // Si no es infinito
+                if (p.getStockDisponible() != null) {
                     int filasAfectadas = platoDao.descontarStockPreciso(pid, q);
                     if (filasAfectadas == 0) {
                         throw new RuntimeException("Stock insuficiente para el plato: " + p.getNombre());
@@ -316,10 +315,9 @@ public class ApiController {
             });
         });
 
-        // 2. Descontar Presentaciones (Vasos, Jarras, etc.)
         descPres.forEach((presId, q) -> {
             presentacionPlatoDao.findById(presId).ifPresent(pres -> {
-                if (pres.getStockDisponible() != null) { // Si no es infinito
+                if (pres.getStockDisponible() != null) {
                     int filasAfectadas = presentacionPlatoDao.descontarStockPreciso(presId, q);
                     if (filasAfectadas == 0) {
                         throw new RuntimeException("Stock insuficiente para el tamaño: " + pres.getNombre() + " de " + pres.getPlato().getNombre());
@@ -330,10 +328,9 @@ public class ApiController {
             });
         });
 
-        // 3. Descontar Sopas Acompañantes
         descSopa.forEach((sid, q) -> {
             platoDao.findById(sid).ifPresent(s -> {
-                if (s.getStockDisponible() != null) { // Si no es infinita
+                if (s.getStockDisponible() != null) {
                     int filasAfectadas = platoDao.descontarStockPreciso(sid, q);
                     if (filasAfectadas == 0) {
                         throw new RuntimeException("Stock insuficiente de la sopa: " + s.getNombre());
@@ -344,12 +341,7 @@ public class ApiController {
             });
         });
     }
-
-    /**
-     * Devuelve los números de mesa que tienen pedidos activos sin pagar.
-     * GET /api/mesas/ocupadas
-     * Respuesta: [2, 5, 7]  (lista de números de mesa)
-     */
+    
     @GetMapping("/mesas/ocupadas")
     public ResponseEntity<List<Integer>> getMesasOcupadas() {
         List<Integer> ocupadas = pedidoDao.findMesasOcupadas(

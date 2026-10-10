@@ -39,7 +39,6 @@
             padding-bottom: 110px;
         }
 
-        /* ── Top Bar ── */
         .top-bar {
             position: sticky;
             top: 0;
@@ -67,7 +66,6 @@
             opacity: .7;
         }
 
-        /* Botón de logout */
         .btn-logout {
             background: rgba(239, 68, 68, .15);
             border: 1px solid rgba(239, 68, 68, .3);
@@ -85,14 +83,12 @@
             background: rgba(239, 68, 68, .3);
         }
 
-        /* ── Container ── */
         .container {
             padding: 12px 14px;
             max-width: 680px;
             margin: 0 auto;
         }
 
-        /* ── Banner ── */
         .day-banner {
             background: rgba(255, 255, 255, .08);
             border: 1.5px solid rgba(255, 255, 255, .18);
@@ -124,7 +120,6 @@
             margin-top: 3px;
         }
 
-        /* ── Sección de categoría ── */
         .cat-section {
             margin-bottom: 14px;
             background: rgba(255, 255, 255, .06);
@@ -183,16 +178,14 @@
             background: rgba(59, 130, 246, .35);
         }
 
-        /* ── Lista de platos ── */
         .platos-list {
             display: flex;
             flex-direction: column;
         }
 
-        /* ── Fila de plato (diseño lista compacta) ── */
         .plato-row {
             display: flex;
-            flex-direction: column;          /* ← dos filas apiladas */
+            flex-direction: column;
             gap: 8px;
             padding: 11px 14px;
             border-bottom: 1px solid rgba(255,255,255,.07);
@@ -220,7 +213,6 @@
             flex-wrap: nowrap;
         }
 
-        /* Toggle activo/inactivo (checkbox táctil) */
         .toggle-wrap {
             flex-shrink: 0;
         }
@@ -247,7 +239,6 @@
             transform: translateX(18px);
         }
 
-        /* Información del plato */
         .plato-info {
             flex: 1;
         }
@@ -287,7 +278,6 @@
             border: 1px solid rgba(246,184,70,.25);
         }
 
-        /* Qty inline */
         .qty-inline {
             display: flex;
             align-items: center;
@@ -318,7 +308,6 @@
             font-family: 'Nunito', sans-serif;
         }
 
-        /* Botones de acción */
         .plato-actions { display: flex; gap: 6px; flex-shrink: 0; margin-left: auto; }
 
         .act-btn {
@@ -350,7 +339,6 @@
             background: rgba(239, 68, 68, .1);
         }
 
-        /* ── Bottom bar ── */
         .actions-bar {
             position: fixed;
             bottom: 0;
@@ -392,7 +380,6 @@
             transform: none;
         }
 
-        /* ── MODAL BASE ── */
         .modal-overlay {
             position: fixed;
             inset: 0;
@@ -507,7 +494,6 @@
             color: #fff;
         }
 
-        /* ── SECCIÓN DE PRESENTACIONES en el modal ── */
         .pres-section {
             margin-top: 16px;
             border-top: 1px solid rgba(255, 255, 255, .1);
@@ -530,7 +516,6 @@
             margin-bottom: 10px;
         }
 
-        /* Fila de presentación: modo lectura */
         .pres-item {
             display: flex;
             align-items: center;
@@ -597,7 +582,6 @@
             color: #FCA5A5;
         }
 
-        /* Botones de fila de presentación */
         .pres-item-btns {
             display: flex;
             gap: 4px;
@@ -632,7 +616,6 @@
             color: #FCA5A5;
         }
 
-        /* Formulario inline de edición / creación de presentación */
         .pres-form {
             background: rgba(0, 0, 0, .2);
             border: 1px solid rgba(246, 184, 70, .2);
@@ -934,7 +917,6 @@
         <button class="btn-main blue" onclick="generarImagenMenu()">📸 Imagen</button>
     </div>
 
-    <!-- Canvas para exportar imagen -->
     <div id="export-wrap">
         <div id="menu-canvas">
             <div class="mc-wave"></div>
@@ -984,7 +966,6 @@
         </div>
     </div>
 
-    <!-- ══ MODAL CREAR/EDITAR PLATO (con sección de presentaciones inline) ══ -->
     <div class="modal-overlay" id="modal">
         <div class="modal-sheet">
             <h2 id="modal-title">Crear Nuevo Plato</h2>
@@ -1017,21 +998,17 @@
                 </div>
             </div>
 
-            <!-- Nota informativa cuando es refresco -->
             <div id="m-refresco-hint"
                 style="display:none;background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.25);border-radius:8px;padding:8px 10px;font-size:.75rem;color:#93C5FD;font-weight:600;margin-bottom:4px;">
                 💡 Los refrescos usan precios por tamaño. Agrega sus presentaciones abajo.
                 El precio base se usará solo si no hay tamaños configurados.
             </div>
 
-            <!-- ════ SECCIÓN PRESENTACIONES INLINE ════ -->
             <div class="pres-section" id="pres-section">
                 <div class="pres-section-title">Tamaños / Presentaciones</div>
 
-                <!-- Lista de presentaciones ya guardadas -->
                 <div class="pres-list-inline" id="modal-pres-list"></div>
 
-                <!-- Formulario de nueva presentación (siempre visible al crear) -->
                 <div class="pres-form open" id="pres-new-form">
                     <div class="inp-row">
                         <input type="text" id="pf-nombre" placeholder="Nombre (Vaso, Jarra…)">
@@ -1065,7 +1042,6 @@
         </div>
     </div>
 
-    <!-- ══ MODAL CONFIRMAR ELIMINAR ══ -->
     <div class="modal-overlay" id="modal-del">
         <div class="modal-sheet" style="max-height:fit-content;">
             <h2 style="color:#FCA5A5;">⚠️ Eliminar plato</h2>
@@ -1081,7 +1057,6 @@
     <script>
         'use strict';
 
-        // ─── Configuración ────────────────────────────────────────────────────────
         const CATEGORIAS = ['SOPAS', 'SEGUNDOS', 'ENSALADAS', 'REFRESCOS', 'EXTRAS', 'ANTOJITOS'];
         const CAT_META = {
             SOPAS: { label: '🍲 Sopas', cls: '', titleCls: '' },
@@ -1101,15 +1076,11 @@
         document.getElementById('date-display').textContent =
             new Date().toLocaleDateString('es-BO', { weekday: 'long', day: 'numeric', month: 'long' }).toUpperCase();
 
-        // ─── Estado global ────────────────────────────────────────────────────────
         let catalogoMaestro = [], seleccionadosHoy = new Set(), cantidadesHoy = {};
         let editandoId = null;
 
-        // Presentaciones en memoria durante la edición del modal
-        // Formato: [ { id?, nombre, precio, stock, modalidad, disponible, _nuevo?, _editando? } ]
         let presEnModal = [];
 
-        // ─── AdminSvc ─────────────────────────────────────────────────────────────
         const AdminSvc = {
             async logout() {
                 if (!confirm('¿Cerrar sesión del panel admin?')) return;
@@ -1118,7 +1089,6 @@
             }
         };
 
-        // ─── API ──────────────────────────────────────────────────────────────────
         const API = {
             async req(url, opts = {}) {
                 const r = await fetch(url, {
@@ -1138,7 +1108,6 @@
             eliminarPres: (id) => fetch(`/api/presentaciones/${id}`, { method: 'DELETE' })
         };
 
-        // ─── UI helpers ───────────────────────────────────────────────────────────
         const UI = {
             onCatChange(cat) {
                 const esRefresco = cat === 'REFRESCOS';
@@ -1147,7 +1116,6 @@
             }
         };
 
-        // ─── Cargar catálogo ──────────────────────────────────────────────────────
         async function cargarCatalogo() {
             try {
                 catalogoMaestro = await API.getPlatos();
@@ -1173,7 +1141,6 @@
             } catch (e) { console.error('cargarCatalogo:', e); }
         }
 
-        // ─── Renderizar lista ─────────────────────────────────────────────────────
         function renderizarCategorias() {
             const container = document.getElementById('menu-container');
             const banner = container.querySelector('.day-banner').outerHTML;
@@ -1185,7 +1152,6 @@
                 const section = document.createElement('div');
                 section.className = `cat-section${meta.cls ? ' ' + meta.cls : ''}`;
 
-                // ── Encabezado ──
                 section.innerHTML = `
                 <div class="cat-head">
                     <span class="cat-title${meta.titleCls ? ' ' + meta.titleCls : ''}">${meta.label}</span>
@@ -1224,7 +1190,6 @@
                 ? `<span class="pres-badge">🥤 ${p.presentaciones.length} tamaños</span>`
                 : '';
         
-            /* Control de cantidad — solo si tiene stock definido */
             const qtyControl = (qty !== null && qty !== undefined) ? `
                 <div class="qty-inline" onclick="event.stopPropagation()">
                     <button class="qty-btn-sm" onclick="adjQty(${p.id},-1)">−</button>
@@ -1275,7 +1240,6 @@
             return row;
         }
 
-        // ─── Toggle activo ────────────────────────────────────────────────────────
         function togglePlato(id, cat) {
             const tog = document.getElementById(`tog-${id}`);
             if (seleccionadosHoy.has(id)) {
@@ -1299,7 +1263,6 @@
             cantidadesHoy[id] = v === '' ? null : Math.max(0, parseInt(v, 10) || 0);
         }
 
-        // ─── Publicar menú ────────────────────────────────────────────────────────
         async function guardarMenuDelDia() {
             const btn = document.getElementById('btn-save');
             btn.textContent = '⏳ Publicando...'; btn.disabled = true;
@@ -1316,7 +1279,6 @@
             }
         }
 
-        // ─── Eliminar plato ───────────────────────────────────────────────────────
         function confirmarEliminar(id, nombre) {
             document.getElementById('del-msg').textContent = `¿Eliminar "${nombre}"? Esta acción no se puede deshacer.`;
             const modal = document.getElementById('modal-del');
@@ -1330,9 +1292,7 @@
             };
         }
 
-        // ─── PresManager — gestión de presentaciones en el modal ─────────────────
         const PresManager = {
-            /** Carga presentaciones guardadas de un plato existente */
             async cargarDesdeServidor(platoId) {
                 try {
                     const lista = await API.getPresentaciones(platoId);
@@ -1343,7 +1303,6 @@
                 this.renderLista();
             },
 
-            /** Inicia con lista vacía (plato nuevo) */
             iniciarVacia() {
                 presEnModal = [];
                 this.renderLista();
@@ -1365,7 +1324,6 @@
                     item.id = `pitem-${idx}`;
 
                     if (pr._editando) {
-                        // Modo edición inline
                         item.innerHTML = `
                         <div style="flex:1;">
                             <div class="pres-form open" style="background:none;border:none;padding:0;">
@@ -1388,7 +1346,6 @@
                             </div>
                         </div>`;
                     } else {
-                        // Modo lectura
                         item.innerHTML = `
                         <div class="pres-item-info">
                             <span class="pres-item-nombre">${pr.nombre}</span>
@@ -1408,7 +1365,6 @@
                 });
             },
 
-            /** Agrega nueva presentación (desde el form de nueva) */
             async agregarNueva() {
                 const nombre = document.getElementById('pf-nombre').value.trim();
                 const precio = parseFloat(document.getElementById('pf-precio').value);
@@ -1421,7 +1377,6 @@
                 const nuevaPres = { nombre, precio, stockDisponible: stock, modalidad, disponible: true, _nuevo: true, _editando: false };
 
                 if (editandoId) {
-                    // Plato ya existente → guardar en servidor de inmediato
                     try {
                         const saved = await API.crearPres(editandoId, { nombre, precio, stockDisponible: stock, modalidad, disponible: true });
                         presEnModal.push({ ...saved, _nuevo: false, _editando: false });
@@ -1430,7 +1385,6 @@
                     presEnModal.push(nuevaPres);
                 }
 
-                // Limpiar form
                 document.getElementById('pf-nombre').value = '';
                 document.getElementById('pf-precio').value = '';
                 document.getElementById('pf-stock').value = '';
@@ -1464,7 +1418,6 @@
                 const cambios = { nombre, precio, stockDisponible: stock, modalidad };
 
                 if (pr.id) {
-                    // Ya existe en BD → PATCH al servidor
                     try { await API.editarPres(pr.id, cambios); }
                     catch (e) { alert('Error al editar: ' + e.message); return; }
                 }
@@ -1496,9 +1449,8 @@
             }
         };
 
-        // ─── ModalPlato ───────────────────────────────────────────────────────────
+        // modal del plato ne el emnu
         const ModalPlato = {
-            /** Abrir modal para crear nuevo plato */
             abrirNuevo(cat) {
                 editandoId = null;
                 presEnModal = [];
@@ -1513,7 +1465,6 @@
                 setTimeout(() => document.getElementById('m-nom').focus(), 300);
             },
 
-            /** Abrir modal para editar plato existente */
             async abrirEdicion(event, id, irAPresentaciones = false) {
                 event.stopPropagation();
                 const p = catalogoMaestro.find(x => x.id === id); if (!p) return;
@@ -1530,7 +1481,6 @@
                 document.getElementById('modal').classList.add('open');
 
                 if (irAPresentaciones) {
-                    // Scroll hasta la sección de presentaciones
                     setTimeout(() => {
                         document.getElementById('pres-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
                         PresManager.mostrarFormNueva();
@@ -1564,7 +1514,6 @@
                         cantidadesHoy[platoId] = stock;
                         seleccionadosHoy.add(platoId);
 
-                        // Guardar presentaciones nuevas en el servidor
                         for (const pr of presEnModal.filter(x => x._nuevo)) {
                             await API.crearPres(platoId, {
                                 nombre: pr.nombre, precio: pr.precio,
@@ -1584,7 +1533,7 @@
             }
         };
 
-        // ─── Generar imagen ───────────────────────────────────────────────────────
+        // Generar el menu en imagen (mejorar kiwi dno e olvidess) 
         async function generarImagenMenu() {
             const dias = ['DOMINGO', 'LUNES', 'MARTES', 'MIÉRCOLES', 'JUEVES', 'VIERNES', 'SÁBADO'];
             const meses = ['ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO', 'JUNIO', 'JULIO', 'AGOSTO', 'SEPTIEMBRE', 'OCTUBRE', 'NOVIEMBRE', 'DICIEMBRE'];
@@ -1605,7 +1554,7 @@
             } catch (err) { alert('Error al generar imagen.'); }
         }
 
-        // ─── Arranque ─────────────────────────────────────────────────────────────
+        //  Arranque del catalo
         cargarCatalogo();
     </script>
 </body>

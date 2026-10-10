@@ -26,14 +26,6 @@ public class adminController {
         return "admin-menu";
     }
 
-    /**
-     * Verificar PIN desde el modal del mesero.
-     * POST /api/admin/verificar-pin
-     * Body: { "pin": "1234" }
-     *
-     * Responde 200 { ok: true }  → JS redirige a /menu
-     * Responde 401 { ok: false } → JS muestra error en el modal
-     */
     @PostMapping("/api/admin/verificar-pin")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> verificarPin(
@@ -51,11 +43,7 @@ public class adminController {
  
         return ResponseEntity.status(401).body(Map.of("ok", false, "msg", "PIN incorrecto"));
     }
- 
-    /**
-     * Cerrar sesión admin.
-     * POST /api/admin/logout
-     */
+    
     @PostMapping("/api/admin/logout")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> logout(HttpSession session) {

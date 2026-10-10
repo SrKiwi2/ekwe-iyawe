@@ -14,7 +14,7 @@ public interface IPlatoDao extends JpaRepository<Plato, Long> {
     List<Plato> findByDisponibleTrue();
     List<Plato> findByCategoriaAndDisponibleTrue(String categoria);
 
-    // 1. Apaga todos los platos (Para limpiar el menú del día anterior)
+    //Para limpiar el menú del día anterior
     @Modifying
     @Query("UPDATE Plato p SET p.disponible = false")
     void marcarTodosComoNoDisponibles();

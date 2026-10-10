@@ -49,8 +49,7 @@ public class Plato {
     @Column(name = "stock_disponible")
     private Integer stockDisponible;
 
-    // Agregar esto en la clase Plato
     @OneToMany(mappedBy = "plato", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JsonIgnoreProperties("plato") // 🌟 ESTO ES VITAL: Evita el bucle infinito en el JSON
+    @JsonIgnoreProperties("plato")
     private List<PresentacionPlato> presentaciones = new ArrayList<>();
 }

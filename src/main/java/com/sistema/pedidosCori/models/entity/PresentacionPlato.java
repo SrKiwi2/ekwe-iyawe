@@ -32,10 +32,9 @@ public class PresentacionPlato {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Relación: Una presentación pertenece a un plato
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "plato_id")
-    @JsonIgnoreProperties("presentaciones") // 🌟 ESTO ES VITAL
+    @JsonIgnoreProperties("presentaciones")
     private Plato plato;
 
     @Column(nullable = false, length = 100)
@@ -51,13 +50,6 @@ public class PresentacionPlato {
     @Column(name = "stock_disponible")
     private Integer stockDisponible;
 
-
-    /**
-     * ★ NUEVO: controla en qué modalidad aparece esta presentación.
-     * MESA   → solo aparece cuando el mesero seleccionó "En Mesa"
-     * LLEVAR → solo aparece cuando seleccionó "Para Llevar"
-     * AMBAS  → siempre visible (default para presentaciones genéricas)
-     */
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     @Builder.Default

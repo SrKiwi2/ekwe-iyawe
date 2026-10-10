@@ -11,8 +11,6 @@ import lombok.Setter;
 @Getter @Setter
 public class AdminPinConfig {
     
-    /** Configura en application.properties: admin.pin=1234 */
     private String pin = "1234";
-    /** Minutos que dura la sesión admin antes de pedir PIN de nuevo */
     private int sessionMinutes = 60;
 }

@@ -11,21 +11,18 @@
     
     <style>
         :root {
-            /* ── Tema marón/naranja igual que mesero ── */
             --maroon: #7C2100;
             --maroon-d: #5A1800;
             --maroon-m: rgba(92, 24, 0, 0.92);
             --gold: #F6B846;
             --accent: #F97316;
 
-            /* ── Tarjetas (blanco para máxima legibilidad en cocina) ── */
             --bg2: #FFFFFF;
             --bg3: #F1F4FA;
             --border: #DCE2EF;
             --text: #1A1E35;
             --text2: #7880A0;
 
-            /* ── Estados ── */
             --pend: #F59E0B;
             --pend-l: #FFFBEB;
             --pend-b: #FDE68A;
@@ -53,7 +50,6 @@
         html,
         body {
             height: 100%;
-            /* Fondo marón igual que la pantalla de inicio del mesero */
             background: var(--maroon);
         }
 
@@ -65,7 +61,6 @@
             overflow: hidden;
         }
 
-        /* ── NAV ── */
         nav {
             display: flex;
             align-items: center;
@@ -118,7 +113,6 @@
             background: rgba(255, 255, 255, 0.25);
         }
 
-        /* ── STATUS BAR ── */
         .sbar {
             display: flex;
             gap: 1px;
@@ -215,13 +209,11 @@
             font-weight: 600;
         }
 
-        /* ── KANBAN ── */
         .kanban {
             flex: 1;
             display: flex;
             gap: 0;
             overflow: hidden;
-            /* sutil separador visual entre columnas sobre el fondo marón */
             background: rgba(0, 0, 0, 0.15);
         }
 
@@ -297,7 +289,6 @@
             gap: 8px;
         }
 
-        /* ── ORDER CARD — se mantiene blanca para máxima legibilidad ── */
         .ocard {
             background: var(--bg2);
             border-radius: var(--r);
@@ -489,7 +480,6 @@
             padding: 9px 11px 11px;
         }
 
-        /* ── ACTION BUTTONS ── */
         .abtn {
             width: 100%;
             border: none;
@@ -530,7 +520,6 @@
             border: 1.5px solid var(--border);
         }
 
-        /* ── EMPTY ── */
         .col-empty {
             text-align: center;
             color: rgba(255, 255, 255, 0.35);
@@ -540,7 +529,6 @@
             opacity: .8;
         }
 
-        /* ── ALERT BAR ── */
         .abar {
             position: fixed;
             top: 54px;
@@ -599,7 +587,6 @@
             font-weight: 800;
         }
 
-        /* ── MOBILE ── */
         @media(max-width:680px) {
             .kanban {
                 flex-direction: column;
@@ -635,7 +622,6 @@
             border-radius: 2px;
         }
 
-        /* ── LOADER ── */
         #loader {
             position: fixed;
             inset: 0;
@@ -799,13 +785,10 @@
             const tipoLbl = esLlevar ? 'LLEVAR' : 'MESA';
 
             const itemsHtml = (p.detalles || []).map(d => {
-                // 1. Verificamos si hay sopa extra
                 const sopaLine = d.acompananteSopa
                     ? `<div class="oc-sopa-row"><span class="oc-sopa">🍲 ${d.acompananteSopa.nombre}</span></div>`
                     : '';
                     
-                // 2. NUEVO: Verificamos si el detalle tiene una presentación (tamaño de refresco)
-                // Si tiene, creamos una pequeña etiqueta azul para que resalte en cocina
                 const presLine = d.presentacion 
                     ? ` <span style="font-size:.72rem; background:rgba(59,130,246,.15); color:#1E3A8A; border:1px solid rgba(59,130,246,.3); padding:1px 5px; border-radius:4px; margin-left:5px; vertical-align:middle;">${d.presentacion.nombre}</span>` 
                     : '';

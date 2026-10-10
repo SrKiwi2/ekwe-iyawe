@@ -52,13 +52,7 @@ public class PedidoServiceImpl implements IPedidoService{
         pedido.setTotal(total);
         return pedidoDao.save(pedido);
     }
- 
-    /**
-     * Construye un DetallePedido desde el DTO.
-     * - presentacionId != null → usa presentacion.precio (refresco con tamaño elegido)
-     * - presentacionId == null → usa plato.precio (sopas, segundos, extras, etc.)
-     * El stock NO se descuenta aquí — lo hace ApiController de forma agregada.
-     */
+
     public DetallePedido construirDetalle(Pedido pedido, PedidoRequestDTO.DetalleRequestDTO d) {
         Plato plato = platoDao.findById(d.getPlatoId())
             .orElseThrow(() -> new RuntimeException("Plato no encontrado: " + d.getPlatoId()));

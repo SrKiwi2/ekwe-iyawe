@@ -69,7 +69,6 @@
             transform: translateX(-18px);
         }
 
-        /* ── Top bar ── */
         .top-bar {
             display: flex;
             align-items: center;
@@ -109,7 +108,6 @@
             font-weight: 700;
         }
 
-        /* ── Buttons ── */
         .btn-p {
             width: 100%;
             background: var(--accent);
@@ -144,7 +142,6 @@
             flex-shrink: 0;
         }
 
-        /* ── Setup screen ── */
         #s-setup {
             background: var(--bg);
         }
@@ -241,7 +238,6 @@
             color: var(--text2);
         }
 
-        /* ── Mesa screen ── */
         .sec-lbl {
             font-weight: 900;
             font-size: .8rem;
@@ -292,7 +288,6 @@
             }
         }
 
-        /* ── Llevar screen ── */
         .ll {
             flex: 1;
             display: flex;
@@ -347,7 +342,6 @@
             font-weight: 600;
         }
 
-        /* ── Menu screen ── */
         .ostrip {
             display: flex;
             align-items: center;
@@ -457,7 +451,6 @@
             color: #fff;
         }
 
-        /* ── Food grid ── */
         .fscroll {
             flex: 1;
             overflow-y: auto;
@@ -624,7 +617,6 @@
             background: #FFE4CC;
         }
 
-        /* ── Empty/error states ── */
         .empty-state {
             grid-column: 1/-1;
             display: flex;
@@ -672,7 +664,6 @@
             opacity: .85;
         }
 
-        /* ── Fixed bottom bar ── */
         .fbar {
             position: fixed;
             bottom: 0;
@@ -721,7 +712,6 @@
             opacity: .85;
         }
 
-        /* ── Drawer ── */
         .backdrop {
             position: fixed;
             inset: 0;
@@ -931,7 +921,6 @@
             color: var(--accent);
         }
 
-        /* ── Soup drawer ── */
         #soup-backdrop {
             z-index: 102;
         }
@@ -1118,7 +1107,6 @@
             opacity: .9;
         }
 
-        /* ── OK screen ── */
         #s-ok {
             background: var(--bg);
             align-items: center;
@@ -1180,7 +1168,6 @@
             margin-top: 4px;
         }
 
-        /* ── Activos ── */
         #s-activos {
             background: var(--bg);
         }
@@ -1236,7 +1223,6 @@
             color: var(--green);
         }
 
-        /* ── Reportes ── */
         #s-reportes {
             background: var(--bg);
         }
@@ -1352,7 +1338,6 @@
             margin-top: 2px;
         }
 
-        /* ── Toasts ── */
         .tarea {
             position: fixed;
             top: 66px;
@@ -1377,9 +1362,9 @@
             animation: tin .2s ease both;
             pointer-events: all;
             box-shadow: var(--shadow);
-            cursor: pointer;            /* indica que es clickeable */
+            cursor: pointer;
             user-select: none;
-            touch-action: pan-x;        /* permite swipe horizontal */
+            touch-action: pan-x;
             transition: transform .2s ease, opacity .2s ease;
             will-change: transform, opacity;
         }
@@ -1460,7 +1445,6 @@
             border-radius: 2px;
         }
 
-        /* ── Loader ── */
         #loader {
             position: fixed;
             inset: 0;
@@ -1636,7 +1620,6 @@
             letter-spacing: .5px;
         }
 
-        /* Tap-counter hint: destello sutil en el logo al acercarse a 5 taps */
         @keyframes logo-ping {
             0% {
                 transform: scale(1)
@@ -2017,7 +2000,6 @@
             transform:translateY(16px) scale(.96);
             transition:transform .28s cubic-bezier(.34,1.3,.64,1);">
     
-            <!-- Logo pequeño -->
             <img src="/img/logo.png" alt="Logo"
                 style="width:56px;height:56px;border-radius:12px;object-fit:cover;">
     
@@ -2028,7 +2010,6 @@
                 Acceso solo para el propietario
             </div>
     
-            <!-- Puntos indicadores de PIN -->
             <div id="admin-dots" style="display:flex;gap:14px;">
                 <div class="admin-dot" id="adot-0"></div>
                 <div class="admin-dot" id="adot-1"></div>
@@ -2079,7 +2060,6 @@
             DEFAULT_EMOJI: '🍴'
         };
 
-        /* ─── API ─── */
         const API = {
             async _req(url, opts = {}) {
                 const r = await fetch(url, { ...opts, headers: { 'Content-Type': 'application/json', ...opts.headers } });
@@ -2091,12 +2071,10 @@
             getPedidosActivos: () => API._req('/api/pedidos/activos'),
             cobrarPedido: (id, met) => API._req(`/api/pedidos/${id}/pagar?metodoPago=${met}`, { method: 'PUT' }),
             getReportes: () => API._req('/api/reportes/diarios'),
-            // ★ NUEVOS:
             agregarDetalles: (pedidoId, detalles) =>
                 API._req(`/api/pedidos/${pedidoId}/detalles`, { method: 'POST', body: JSON.stringify(detalles) })
         };
 
-        /* ─── Estado ─── */
         const State = {
             platos: [], sopasDisponibles: [], stockLocal: {},
             order: { tipo: null, mesa: null, nombre: null, cat: 'Todos', cart: {} },
@@ -2120,13 +2098,11 @@
                 });
             },
             cartItems() { return Object.values(this.order.cart); },
-            // ★ Precio: usa presentacion.precio si tiene presentación, si no plato.precio
             cartTotal() { return this.cartItems().reduce((s, i) => s + (i.presentacion?.precio ?? i.p.precio) * i.q, 0); },
             cartQty() { return this.cartItems().reduce((s, i) => s + i.q, 0); },
             cartQtyForPlato(id) { return this.cartItems().filter(i => i.p.id === id).reduce((s, i) => s + i.q, 0); },
             cartSopaForPlato(id) { const c = this.cartItems().find(i => i.p.id === id && i.sopa); return c?.sopa ?? null; },
 
-            // ★ ACTUALIZADO: acepta presentacion además de sopa
             addToCart(platoId, presentacionObj, sopaObj) {
                 const p = this.platos.find(x => x.id === platoId);
                 if (!p) return { ok: false, error: 'Plato no encontrado' };
@@ -2143,7 +2119,6 @@
                         return { ok: false, error: `Solo quedan ${stSopa} porciones de ${sopaObj.nombre}` };
                 }
 
-                // ★ CartKey incluye presentacion para diferenciar tamaños del mismo refresco
                 const cartKey = `${platoId}_${presentacionObj ? presentacionObj.id : 'NONE'}_${sopaObj ? sopaObj.id : 'NONE'}`;
                 if (!this.order.cart[cartKey])
                     this.order.cart[cartKey] = { p, presentacion: presentacionObj || null, q: 0, sopa: sopaObj || null, cartKey };
@@ -2167,7 +2142,6 @@
             }
         };
 
-        /* ─── Toast ─── */
         const Toast = {
             _area: null,
         
@@ -2190,16 +2164,13 @@
         
                 this._area.appendChild(t);
         
-                /* Auto-dismiss */
                 const timer = setTimeout(() => this._dismiss(t), CONFIG.TOAST_DURATION_MS);
         
-                /* Click en cualquier parte del toast → cerrar inmediatamente */
                 t.addEventListener('click', () => {
                     clearTimeout(timer);
                     this._dismiss(t);
                 });
         
-                /* Swipe para descartar (horizontal o hacia arriba) */
                 let startX = 0, startY = 0, dragging = false;
         
                 t.addEventListener('touchstart', e => {
@@ -2212,7 +2183,6 @@
                     if (!dragging) return;
                     const dx = e.touches[0].clientX - startX;
                     const dy = e.touches[0].clientY - startY;
-                    /* Seguir el dedo si el movimiento es mayormente horizontal o hacia arriba */
                     if (Math.abs(dx) > Math.abs(dy) || dy < 0) {
                         t.style.transform = `translateX(${dx}px) translateY(${Math.min(dy, 0)}px)`;
                         t.style.opacity   = `${Math.max(0, 1 - Math.abs(dx) / 120)}`;
@@ -2224,12 +2194,10 @@
                     dragging = false;
                     const dx = e.changedTouches[0].clientX - startX;
                     const dy = e.changedTouches[0].clientY - startY;
-                    /* Si arrastró más de 60px horizontal o 40px hacia arriba → descartar */
                     if (Math.abs(dx) > 60 || dy < -40) {
                         clearTimeout(timer);
                         this._dismiss(t);
                     } else {
-                        /* Volver a posición original */
                         t.style.transform = '';
                         t.style.opacity   = '';
                     }
@@ -2244,7 +2212,6 @@
             }
         };
 
-        /* ─── Nav ─── */
         const Nav = {
             current: 's-setup',
             go(id) {
@@ -2256,7 +2223,6 @@
             }
         };
 
-        /* ─── Clock ─── */
         const Clock = {
             start() { this._tick(); setInterval(() => this._tick(), 15000); },
             _tick() {
@@ -2265,7 +2231,6 @@
             }
         };
 
-        /* ─── MenuLoader ─── */
         const MenuLoader = {
             _retries: 0, MAX_RETRIES: 3,
             async load() {
@@ -2292,7 +2257,6 @@
             }
         };
 
-        /* ─── MenuView ─── */
         const MenuView = {
             _emojiFor(cat) { return CONFIG.CAT_EMOJI[cat?.toUpperCase()] ?? CONFIG.DEFAULT_EMOJI; },
             rebuild() { this._buildCats(); this._renderGrid(); },
@@ -2308,10 +2272,8 @@
                     return posA - posB;
                 });
                 
-                // ❌ Ya no inyectamos 'Todos'. Usamos solo las categorías reales.
                 const cats = catsHoy;
                 
-                // ✅ Si no hay categoría seleccionada (o venía con 'Todos' de antes), forzamos la primera
                 if (!State.order.cat || State.order.cat === 'Todos') {
                     State.order.cat = cats.length > 0 ? cats[0] : null;
                 }
@@ -2336,7 +2298,6 @@
                 const g = document.getElementById('food-grid'); g.innerHTML = '';
                 if (!State.platos.length) { g.innerHTML = this._emptyTpl('🍽️', 'Sin platos disponibles', 'El administrador debe publicar el menú del día.', true); return; }
 
-                // ❌ Eliminamos la lógica que agrupaba "Todos". Ahora solo filtramos.
                 const data = State.platos.filter(p => p.categoria === State.order.cat);
 
                 if (!data.length) { 
@@ -2351,14 +2312,12 @@
             },
             _appendCard(container, p) {
                 const stock = State.stockLocal[p.id];
-                // Si el stock es null, no está agotado (Infinito). Si es 0 o menor, sí.
                 const agotado = stock != null && stock <= 0; 
                 const low = stock != null && stock > 0 && stock <= 3;
                 
                 const qTotal = State.cartQtyForPlato(p.id), sopa = State.cartSopaForPlato(p.id);
                 const hasPres = p.presentaciones && p.presentaciones.length > 0;
                 
-                // Identificamos si es la categoría de refrescos
                 const isRefresco = p.categoria === 'REFRESCOS';
 
                 const precioDisplay = hasPres
@@ -2376,9 +2335,6 @@
                 d.className = ['fcard', qTotal > 0 ? 'has' : '', agotado ? 'agotado' : '', sopa ? 'has-sopa' : ''].filter(Boolean).join(' ');
                 d.id = `fc-${p.id}`;
                 
-                // 🌟 LA MAGIA ESTÁ AQUÍ:
-                // Si es refresco, ocultamos el precio y el stock de la tarjeta principal.
-                // En su lugar, ponemos un indicativo visual limpio.
                 const infoExtra = isRefresco 
                     ? `<div style="font-size:.75rem; color:var(--text2); font-weight:800; margin-top:4px;">Elegir tamaño ›</div>` 
                     : `<div class="fprice">${precioDisplay}</div>${stkHtml}`;
@@ -2412,7 +2368,6 @@
             }
         };
 
-        /* ─── PresentacionDrawer ── (★ NUEVO) ─── */
         const PresentacionDrawer = {
             _platoId:   null,
             _selectedPres: null,
@@ -2438,9 +2393,6 @@
                 document.getElementById('pres-drawer').classList.add('open');
         
                 try {
-                    // ★ NUEVO: pasar el tipo del pedido para filtrar por modalidad en el servidor
-                    //   tipo = 'mesa' → ?tipo=MESA  →  servidor devuelve presentaciones MESA + AMBAS
-                    //   tipo = 'llevar' → ?tipo=LLEVAR → servidor devuelve presentaciones LLEVAR + AMBAS
                     const tipoParam = State.order.tipo === 'llevar' ? 'LLEVAR' : 'MESA';
                     const presentaciones = await fetch(
                         `/api/platos/${platoObj.id}/presentaciones?tipo=${tipoParam}`
@@ -2449,7 +2401,6 @@
                     this._renderOpciones(platoObj, presentaciones);
                 } catch(err) {
                     console.error('[PresentacionDrawer] Error al cargar presentaciones:', err);
-                    // Si falla la llamada, mostrar todas las presentaciones en memoria
                     this._renderOpciones(platoObj, platoObj.presentaciones ?? []);
                 }
             },
@@ -2458,14 +2409,12 @@
                 const container = document.getElementById('pres-options');
                 container.innerHTML = '';
         
-                // Filtrar solo las disponibles con stock
                 const disponibles = presentaciones.filter(pr => {
                     const st = pr.stockDisponible;
                     return pr.disponible !== false && (st === null || st === undefined || st > 0);
                 });
         
                 if (!disponibles.length) {
-                    // No hay presentaciones disponibles para esta modalidad → agregar al precio base
                     this.close();
                     CartView._addToCartAndSync(platoObj.id, null, null);
                     Toast.show('i', '🥤', platoObj.nombre, 'Agregado al precio base');
@@ -2481,7 +2430,6 @@
                             : `<span class="soup-stk">${st} disp.</span>`)
                         : '';
         
-                    // Badge de modalidad (solo si no es AMBAS, para dar contexto al mesero)
                     const modalBadge = pr.modalidad && pr.modalidad !== 'AMBAS'
                         ? `<span style="font-size:.6rem;padding:1px 5px;border-radius:3px;margin-left:4px;
                                     background:${pr.modalidad==='MESA'?'rgba(34,197,94,.15)':'rgba(59,130,246,.15)'};
@@ -2507,7 +2455,6 @@
                     container.appendChild(opt);
                 });
         
-                // Mostrar presentaciones agotadas (solo visual, no clickeables)
                 presentaciones
                     .filter(pr => !disponibles.find(x => x.id === pr.id))
                     .forEach(pr => {
@@ -2552,7 +2499,6 @@
             }
         };
 
-        /* ─── SoupDrawer ─── (sin cambios de lógica) */
         const SoupDrawer = {
             _platoId: null, _sopaId: 'NONE',
             open(platoObj) {
@@ -2593,13 +2539,11 @@
             }
         };
 
-        /* ─── CartView ── (★ actualizado para presentaciones) */
         const CartView = {
             handleAdd(p) {
                 if (p.categoria === 'SEGUNDOS') {
                     SoupDrawer.open(p);
                 } else if (p.presentaciones && p.presentaciones.length > 0) {
-                    // ★ Platos con tamaños → abre drawer de presentaciones
                     PresentacionDrawer.open(p);
                 } else {
                     this._addToCartAndSync(p.id, null, null);
@@ -2614,7 +2558,6 @@
                 MenuView.syncCard(platoId); this._updUI();
             },
 
-            // ★ Acepta presentacion además de sopa
             _addToCartAndSync(platoId, presentacionObj, sopaObj) {
                 const r = State.addToCart(platoId, presentacionObj, sopaObj);
                 if (!r.ok) { Toast.show('w', '⚠️', 'Sin stock', r.error); return; }
@@ -2635,7 +2578,6 @@
                 document.getElementById('d-items').innerHTML = !items.length
                     ? '<p style="text-align:center;color:var(--text2);padding:24px 0;font-weight:600;">Agrega platos del menú</p>'
                     : items.map(({ p, presentacion, q, sopa, cartKey }) => {
-                        // ★ Nombre de presentación en el ítem del carrito
                         const nombre = presentacion ? `${p.nombre} — ${presentacion.nombre}` : p.nombre;
                         const precio = presentacion ? presentacion.precio : p.precio;
                         return `<div class="ditem">
@@ -2669,7 +2611,6 @@
             }
         };
 
-        /* ─── OrderSvc ── (★ incluye presentacionId) */
         const OrderSvc = {
             async send() {
                 const items = State.cartItems();
@@ -2684,7 +2625,6 @@
                     observaciones: document.getElementById('obs').value.trim(),
                     pagado: v[0] === 'true',
                     metodoPago: v[1] === 'none' ? null : v[1],
-                    // ★ Incluye presentacionId en cada detalle
                     detalles: items.map(({ p, presentacion, q, sopa }) => ({
                         platoId: p.id,
                         cantidad: q,
@@ -2707,21 +2647,17 @@
             }
         };
 
-        /* ─── AgregarSvc ── (★ NUEVO: agregar a comanda existente) */
         const AgregarSvc = {
             _pedidoId: null, _pedidoEstado: null, _mesa: null,
 
-            /** Llamado desde el botón "+ Agregar" en Pedidos Activos */
             iniciar(pedidoId, estado, mesa) {
                 this._pedidoId = pedidoId;
                 this._pedidoEstado = estado;
                 this._mesa = mesa;
 
                 if (estado === 'PENDIENTE' || estado === 'EN_PREPARACION') {
-                    // Estado activo → agregar directamente sin preguntar
                     this._irAlMenu(false);
                 } else {
-                    // Estado LISTO → preguntar si añadir a cuenta o nuevo pedido
                     const label = mesa ? `Mesa ${mesa}` : 'Para llevar';
                     document.getElementById('agregar-modal-title').textContent = `${label}`;
                     document.getElementById('agregar-modal-sub').textContent =
@@ -2750,18 +2686,15 @@
                 State.order.cat = null;
 
                 if (esNuevoPedido) {
-                    // Flujo normal de nuevo pedido con mesa pre-seleccionada
                     State.order.tipo = 'mesa';
                     State.order.mesa = this._mesa;
                     const chip = document.getElementById('chip-tipo');
                     chip.textContent = 'MESA'; chip.className = 'chip chip-m';
                     document.getElementById('chip-id').textContent = `Mesa ${this._mesa}`;
                     MenuView.rebuild();
-                    // Reemplazar botón "Enviar a Cocina" por comportamiento normal
                     document.getElementById('btn-send').onclick = () => OrderSvc.send();
                     Nav.go('s-menu');
                 } else {
-                    // Menú en modo "agregar a pedido existente"
                     const chip = document.getElementById('chip-tipo');
                     chip.textContent = 'AGREGAR';
                     chip.className = 'chip';
@@ -2771,7 +2704,6 @@
 
                     MenuView.rebuild();
 
-                    // ★ Cambiar el botón de envío para llamar al endpoint de agregar
                     const btn = document.getElementById('btn-send');
                     btn.textContent = '➕ Agregar a la cuenta';
                     btn.onclick = () => this._enviarAgregar();
@@ -2796,7 +2728,6 @@
                     CartView.close();
                     Toast.show('s', '✅', 'Agregado', 'Los ítems se añadieron a la cuenta');
                     State.resetOrder(); CartView._updUI();
-                    // Restaurar botón y navegar a activos
                     btn.innerHTML = '✅ Enviar a Cocina'; btn.disabled = false;
                     btn.onclick = () => OrderSvc.send();
                     document.getElementById('chip-tipo').style.cssText = '';
@@ -2808,7 +2739,6 @@
             }
         };
 
-        /* ─── ActivosView ── (★ añade botón Agregar en cada tarjeta) */
         const ActivosView = {
             _interval: null,
             async open() { Nav.go('s-activos'); await this.load(); this._interval = setInterval(() => this.load(), CONFIG.ACTIVOS_POLL_MS); },
@@ -2834,10 +2764,7 @@
 
                     const isLl   = p.tipo === 'LLEVAR';
                     const label  = isLl ? `📦 ${p.nombreCliente}` : `🪑 Mesa ${p.numeroMesa}`;
-            
-                    /* ★ FIX: usa precioUnitario del detalle, no plato.precio
-                    Así los refrescos con presentación muestran el precio real (ej: 10 Bs)
-                    en lugar del precio base del plato padre (que puede ser 0) */
+
                     const total = (p.detalles ?? []).reduce(
                         (a, d) => a + (d.precioUnitario ?? d.plato?.precio ?? 0) * d.cantidad,
                         0
@@ -2848,8 +2775,7 @@
                                 : '#2ecc71';
             
                     const itemsHtml = (p.detalles ?? []).map(d => {
-                        /* ★ FIX: muestra nombre de presentación si existe (refresco con tamaño)
-                        y usa precioUnitario para el precio individual */
+                        
                         const presLine = d.presentacion
                             ? ` <span style="font-size:.65rem;background:#DBEAFE;color:#1D4ED8;
                                             border-radius:3px;padding:1px 4px;">${d.presentacion.nombre}</span>`
@@ -2860,7 +2786,6 @@
                                 🍲 ${d.acompananteSopa.nombre}
                             </span>`
                             : '';
-                        /* Precio unitario real (presentacion.precio ya fue guardado en precioUnitario) */
                         const precio = d.precioUnitario ?? d.plato?.precio ?? 0;
             
                         return `<div style="font-size:.78rem;color:var(--text2);padding:2px 0;display:flex;align-items:baseline;gap:4px;">
@@ -2871,10 +2796,7 @@
                                     </span>
                                 </div>`;
                     }).join('');
-            
-                    /* ★ FIX: si ya está pagado, no mostrar la fila de cobro ni el botón Agregar —
-                    solo el sello verde. El registro desaparecerá en la próxima recarga
-                    automática (20s) o cuando el mesero pulse Actualizar. */
+
                     const pagoHtml = p.pagado
                         ? `<div style="color:#27ae60;font-weight:800;margin-top:8px;font-size:.85rem;">
                             ✅ Pagado con ${p.metodoPago}
@@ -2928,16 +2850,12 @@
                 const metodo = document.getElementById(`metodo-${id}`)?.value;
                 if (!metodo) return;
             
-                /* Deshabilitar botones para evitar doble click */
                 const payBox = document.getElementById(`pay-box-${id}`);
                 if (payBox) payBox.querySelectorAll('button').forEach(b => b.disabled = true);
             
                 try {
                     await API.cobrarPedido(id, metodo);
-            
-                    /* SIN Toast — cobro silencioso, la desaparición es el feedback visual */
-            
-                    /* Desvanecer y eliminar la tarjeta del DOM */
+
                     const card = document.getElementById(`activo-card-${id}`);
                     if (card) {
                         card.style.transition = 'opacity .3s, transform .3s, max-height .35s, margin .35s, padding .35s';
@@ -2958,7 +2876,6 @@
             },
         };
 
-        /* ─── ReportesView ─── (sin cambios) */
         const ReportesView = {
             async open() {
                 Nav.go('s-reportes');
@@ -2993,7 +2910,6 @@
             _toggle(idx) { const b = document.getElementById(`rep-body-${idx}`), a = document.getElementById(`rep-arr-${idx}`), o = b.classList.toggle('open'); if (a) a.textContent = o ? '▲ Ocultar' : '▼ Ver detalle'; }
         };
 
-        /* ─── WSManager ─── */
         const WSManager = {
             _client: null, _retryDelay: CONFIG.WS_RETRY_BASE_MS,
             connect() {
@@ -3044,7 +2960,6 @@
             }
         };
 
-        /* ─── PIN ─── */
         const PIN = {
             _value: '', _taps: 0, _tapTimer: null,
             registerTap() {
@@ -3063,7 +2978,6 @@
             _verify() { if (this._value === CONFIG.REPORTS_PIN) { this.close(); ReportesView.open(); } else { for (let i = 0; i < 4; i++)document.getElementById(`pd-${i}`)?.classList.add('error'); setTimeout(() => { this._value = ''; this._render(); }, 750); } }
         };
 
-        /* ─── App ─── */
         const App = {
             pickTipo(t) {
                 State.order.tipo = t;
@@ -3078,7 +2992,6 @@
                 chip.style.cssText = '';
                 document.getElementById('chip-id').textContent = esMesa ? `Mesa ${State.order.mesa}` : State.order.nombre;
                 
-                // ✅ CAMBIO AQUÍ: Lo dejamos en null para que _buildCats asigne la primera categoría (Segundos)
                 State.order.cat = null; 
                 
                 const btn = document.getElementById('btn-send');
@@ -3101,7 +3014,6 @@
                 const g = document.getElementById('mesa-grid');
                 g.innerHTML = '';
             
-                // Pedir mesas ocupadas al servidor
                 let ocupadas = new Set();
                 try {
                     const res = await fetch('/api/mesas/ocupadas');
@@ -3130,7 +3042,6 @@
                         State.order.mesa = i;
                         document.getElementById('btn-mesa').disabled = false;
             
-                        // Aviso si la mesa ya tiene cuenta abierta (no bloquea, solo informa)
                         if (estaOcupada) {
                             Toast.show('w', '⚠️', `Mesa ${i} ocupada`,
                                 'Ya tiene una cuenta abierta sin cobrar');
@@ -3152,20 +3063,12 @@
             },
         };
 
-        /* ─── Bootstrap ─── */
         (async () => {
             Clock.start();
             await MenuLoader.load();
             WSManager.connect();
         })();
 
-        /* ─── AdminAccess — modal de acceso al panel del dueño ───────────────
-        Llama a POST /api/admin/verificar-pin con el PIN ingresado.
-        Si el servidor responde OK → redirige a /menu (sesión marcada).
-        Si el servidor responde 401 → animación de error, limpiar.
-        Activación extra: si la URL tiene ?admin=1 (redirigido por el interceptor)
-        se abre automáticamente al cargar.
-        ─────────────────────────────────────────────────────────────────────── */
         const AdminAccess = {
             _value: '',
         
@@ -3176,12 +3079,10 @@
                 const overlay = document.getElementById('admin-overlay');
                 const box     = document.getElementById('admin-box');
         
-                // Manipular estilos directamente — evita el problema de especificidad
                 overlay.style.opacity       = '1';
                 overlay.style.pointerEvents = 'all';
                 box.style.transform         = 'translateY(0) scale(1)';
         
-                // Limpiar ?admin=1 de la URL si vino del interceptor
                 const url = new URL(window.location.href);
                 if (url.searchParams.has('admin')) {
                     url.searchParams.delete('admin');
@@ -3248,7 +3149,6 @@
             }
         };
         
-        /* ─── Detección automática del parámetro ?admin=1 ─── */
         (function checkAdminRedirect() {
             const params = new URLSearchParams(window.location.search);
             if (params.get('admin') === '1') {

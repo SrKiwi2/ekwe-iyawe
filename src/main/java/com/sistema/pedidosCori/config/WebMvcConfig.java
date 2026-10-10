@@ -16,6 +16,5 @@ public class WebMvcConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(adminInterceptor)
                 .addPathPatterns("/menu", "/menu/**");
-        // /mesero y /cocina quedan libres — sin interceptor
     }
 }
